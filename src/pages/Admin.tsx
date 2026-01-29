@@ -3,7 +3,6 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
 import {
   Dialog,
   DialogContent,
@@ -22,8 +21,7 @@ import {
 import { Plus, Trash2, Edit, Settings, Video, Save, Shield, Link, CreditCard, MessageCircle } from "lucide-react";
 import { useContentStore, Video as VideoType } from "@/stores/contentStore";
 import { toast } from "sonner";
-import { ThumbnailUpload } from "@/components/admin/ThumbnailUpload";
-import { VideoUpload } from "@/components/admin/VideoUpload";
+import { VideoForm } from "@/components/admin/VideoForm";
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -43,12 +41,16 @@ const Admin = () => {
     useContentStore();
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [editingVideo, setEditingVideo] = useState<VideoType | null>(null);
-  const [newVideo, setNewVideo] = useState({
+  const [newVideo, setNewVideo] = useState<Partial<VideoType>>({
     title: "",
     description: "",
     thumbnail: "",
     videoUrl: "",
     paymentLink: "",
+    price: 30,
+    views: "1.0K",
+    duration: "1min 00s",
+    addedAt: "Just now",
     isVip: false,
     isActive: true,
     stripeEnabled: true,
@@ -62,13 +64,31 @@ const Admin = () => {
       toast.error("Preencha título e faça upload da thumbnail");
       return;
     }
-    addVideo(newVideo);
+    addVideo({
+      title: newVideo.title || "",
+      description: newVideo.description || "",
+      thumbnail: newVideo.thumbnail || "",
+      videoUrl: newVideo.videoUrl || "",
+      paymentLink: newVideo.paymentLink || "",
+      price: newVideo.price || 30,
+      views: newVideo.views || "1.0K",
+      duration: newVideo.duration || "1min 00s",
+      addedAt: newVideo.addedAt || "Just now",
+      isVip: newVideo.isVip ?? false,
+      isActive: newVideo.isActive ?? true,
+      stripeEnabled: newVideo.stripeEnabled ?? true,
+      paypalEnabled: newVideo.paypalEnabled ?? true,
+    });
     setNewVideo({
       title: "",
       description: "",
       thumbnail: "",
       videoUrl: "",
       paymentLink: "",
+      price: 30,
+      views: "1.0K",
+      duration: "1min 00s",
+      addedAt: "Just now",
       isVip: false,
       isActive: true,
       stripeEnabled: true,
@@ -121,99 +141,19 @@ const Admin = () => {
                 Novo Vídeo
               </Button>
             </DialogTrigger>
-            <DialogContent className="bg-card border-border max-w-md max-h-[85vh] overflow-y-auto">
+            <DialogContent className="bg-card border-border max-w-lg max-h-[85vh] overflow-y-auto">
               <DialogHeader>
                 <DialogTitle className="flex items-center gap-2 text-base">
                   <Video className="w-4 h-4 text-primary" />
                   Adicionar Vídeo
                 </DialogTitle>
               </DialogHeader>
-              <div className="space-y-3 pt-2">
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="space-y-1">
-                    <Label className="text-xs">Título</Label>
-                    <Input
-                      value={newVideo.title}
-                      onChange={(e) =>
-                        setNewVideo({ ...newVideo, title: e.target.value })
-                      }
-                      placeholder="Título do vídeo"
-                      className="bg-background/50 h-8 text-sm"
-                    />
-                  </div>
-                  <div className="space-y-1">
-                    <Label className="text-xs">Descrição</Label>
-                    <Input
-                      value={newVideo.description}
-                      onChange={(e) =>
-                        setNewVideo({ ...newVideo, description: e.target.value })
-                      }
-                      placeholder="Descrição curta"
-                      className="bg-background/50 h-8 text-sm"
-                    />
-                  </div>
-                </div>
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="space-y-1">
-                    <Label className="text-xs">Thumbnail</Label>
-                    <ThumbnailUpload
-                      value={newVideo.thumbnail}
-                      onChange={(url) => setNewVideo({ ...newVideo, thumbnail: url })}
-                    />
-                  </div>
-                  <div className="space-y-1">
-                    <Label className="text-xs">Vídeo</Label>
-                    <VideoUpload
-                      value={newVideo.videoUrl}
-                      onChange={(url) => setNewVideo({ ...newVideo, videoUrl: url })}
-                    />
-                  </div>
-                </div>
-                <div className="space-y-1">
-                  <Label className="text-xs">Link de Pagamento</Label>
-                  <Input
-                    value={newVideo.paymentLink}
-                    onChange={(e) =>
-                      setNewVideo({ ...newVideo, paymentLink: e.target.value })
-                    }
-                    placeholder="https://buy.stripe.com/..."
-                    className="bg-background/50 h-8 text-sm"
-                  />
-                </div>
-                <div className="grid grid-cols-3 gap-2">
-                  <div className="flex items-center justify-between p-2 rounded-lg bg-background/50">
-                    <Label className="text-xs">VIP</Label>
-                    <Switch
-                      checked={newVideo.isVip}
-                      onCheckedChange={(checked) =>
-                        setNewVideo({ ...newVideo, isVip: checked })
-                      }
-                    />
-                  </div>
-                  <div className="flex items-center justify-between p-2 rounded-lg bg-background/50">
-                    <Label className="text-xs">Stripe</Label>
-                    <Switch
-                      checked={newVideo.stripeEnabled}
-                      onCheckedChange={(checked) =>
-                        setNewVideo({ ...newVideo, stripeEnabled: checked })
-                      }
-                    />
-                  </div>
-                  <div className="flex items-center justify-between p-2 rounded-lg bg-background/50">
-                    <Label className="text-xs">PayPal</Label>
-                    <Switch
-                      checked={newVideo.paypalEnabled}
-                      onCheckedChange={(checked) =>
-                        setNewVideo({ ...newVideo, paypalEnabled: checked })
-                      }
-                    />
-                  </div>
-                </div>
-                <Button onClick={handleAddVideo} className="w-full bg-primary hover:bg-primary/90 text-primary-foreground h-9">
-                  <Save className="w-4 h-4 mr-2" />
-                  Salvar Vídeo
-                </Button>
-              </div>
+              <VideoForm 
+                video={newVideo}
+                onChange={(updates) => setNewVideo({ ...newVideo, ...updates })}
+                onSave={handleAddVideo}
+                saveLabel="Salvar Vídeo"
+              />
             </DialogContent>
           </Dialog>
         </motion.div>
@@ -229,9 +169,10 @@ const Admin = () => {
               <TableHeader>
                 <TableRow className="border-border/50">
                   <TableHead className="text-muted-foreground">Título</TableHead>
+                  <TableHead className="text-muted-foreground">Preço</TableHead>
+                  <TableHead className="text-muted-foreground">Views</TableHead>
                   <TableHead className="text-muted-foreground">Tipo</TableHead>
                   <TableHead className="text-muted-foreground">Status</TableHead>
-                  <TableHead className="text-muted-foreground">Pagamentos</TableHead>
                   <TableHead className="text-right text-muted-foreground">Ações</TableHead>
                 </TableRow>
               </TableHeader>
@@ -240,6 +181,12 @@ const Admin = () => {
                   <TableRow key={video.id} className="border-border/30 hover:bg-muted/20 transition-colors">
                     <TableCell className="font-medium max-w-xs truncate">
                       {video.title}
+                    </TableCell>
+                    <TableCell>
+                      <span className="text-success font-medium">${video.price?.toFixed(2) || "0.00"}</span>
+                    </TableCell>
+                    <TableCell>
+                      <span className="text-muted-foreground">{video.views || "0"}</span>
                     </TableCell>
                     <TableCell>
                       <span
@@ -263,20 +210,6 @@ const Admin = () => {
                         {video.isActive ? "Ativo" : "Oculto"}
                       </span>
                     </TableCell>
-                    <TableCell>
-                      <div className="flex gap-1.5">
-                        {video.stripeEnabled && (
-                          <span className="text-xs px-2 py-1 rounded bg-violet-500/20 text-violet-400">
-                            Stripe
-                          </span>
-                        )}
-                        {video.paypalEnabled && (
-                          <span className="text-xs px-2 py-1 rounded bg-blue-500/20 text-blue-400">
-                            PayPal
-                          </span>
-                        )}
-                      </div>
-                    </TableCell>
                     <TableCell className="text-right">
                       <div className="flex justify-end gap-1">
                         <Dialog>
@@ -290,7 +223,7 @@ const Admin = () => {
                               <Edit className="w-4 h-4" />
                             </Button>
                           </DialogTrigger>
-                          <DialogContent className="bg-card border-border max-w-md max-h-[85vh] overflow-y-auto">
+                          <DialogContent className="bg-card border-border max-w-lg max-h-[85vh] overflow-y-auto">
                             <DialogHeader>
                               <DialogTitle className="flex items-center gap-2 text-base">
                                 <Edit className="w-4 h-4 text-primary" />
@@ -298,127 +231,12 @@ const Admin = () => {
                               </DialogTitle>
                             </DialogHeader>
                             {editingVideo && (
-                              <div className="space-y-3 pt-2">
-                                <div className="grid grid-cols-2 gap-3">
-                                  <div className="space-y-1">
-                                    <Label className="text-xs">Título</Label>
-                                    <Input
-                                      value={editingVideo.title}
-                                      onChange={(e) =>
-                                        setEditingVideo({
-                                          ...editingVideo,
-                                          title: e.target.value,
-                                        })
-                                      }
-                                      className="bg-background/50 h-8 text-sm"
-                                    />
-                                  </div>
-                                  <div className="space-y-1">
-                                    <Label className="text-xs">Descrição</Label>
-                                    <Input
-                                      value={editingVideo.description}
-                                      onChange={(e) =>
-                                        setEditingVideo({
-                                          ...editingVideo,
-                                          description: e.target.value,
-                                        })
-                                      }
-                                      className="bg-background/50 h-8 text-sm"
-                                    />
-                                  </div>
-                                </div>
-                                <div className="grid grid-cols-2 gap-3">
-                                  <div className="space-y-1">
-                                    <Label className="text-xs">Thumbnail</Label>
-                                    <ThumbnailUpload
-                                      value={editingVideo.thumbnail}
-                                      onChange={(url) =>
-                                        setEditingVideo({ ...editingVideo, thumbnail: url })
-                                      }
-                                    />
-                                  </div>
-                                  <div className="space-y-1">
-                                    <Label className="text-xs">Vídeo</Label>
-                                    <VideoUpload
-                                      value={editingVideo.videoUrl}
-                                      onChange={(url) =>
-                                        setEditingVideo({ ...editingVideo, videoUrl: url })
-                                      }
-                                    />
-                                  </div>
-                                </div>
-                                <div className="space-y-1">
-                                  <Label className="text-xs">Link de Pagamento</Label>
-                                  <Input
-                                    value={editingVideo.paymentLink}
-                                    onChange={(e) =>
-                                      setEditingVideo({
-                                        ...editingVideo,
-                                        paymentLink: e.target.value,
-                                      })
-                                    }
-                                    placeholder="https://buy.stripe.com/..."
-                                    className="bg-background/50 h-8 text-sm"
-                                  />
-                                </div>
-                                <div className="grid grid-cols-4 gap-2">
-                                  <div className="flex items-center justify-between p-2 rounded-lg bg-background/50">
-                                    <Label className="text-xs">Ativo</Label>
-                                    <Switch
-                                      checked={editingVideo.isActive}
-                                      onCheckedChange={(checked) =>
-                                        setEditingVideo({
-                                          ...editingVideo,
-                                          isActive: checked,
-                                        })
-                                      }
-                                    />
-                                  </div>
-                                  <div className="flex items-center justify-between p-2 rounded-lg bg-background/50">
-                                    <Label className="text-xs">VIP</Label>
-                                    <Switch
-                                      checked={editingVideo.isVip}
-                                      onCheckedChange={(checked) =>
-                                        setEditingVideo({
-                                          ...editingVideo,
-                                          isVip: checked,
-                                        })
-                                      }
-                                    />
-                                  </div>
-                                  <div className="flex items-center justify-between p-2 rounded-lg bg-background/50">
-                                    <Label className="text-xs">Stripe</Label>
-                                    <Switch
-                                      checked={editingVideo.stripeEnabled}
-                                      onCheckedChange={(checked) =>
-                                        setEditingVideo({
-                                          ...editingVideo,
-                                          stripeEnabled: checked,
-                                        })
-                                      }
-                                    />
-                                  </div>
-                                  <div className="flex items-center justify-between p-2 rounded-lg bg-background/50">
-                                    <Label className="text-xs">PayPal</Label>
-                                    <Switch
-                                      checked={editingVideo.paypalEnabled}
-                                      onCheckedChange={(checked) =>
-                                        setEditingVideo({
-                                          ...editingVideo,
-                                          paypalEnabled: checked,
-                                        })
-                                      }
-                                    />
-                                  </div>
-                                </div>
-                                <Button
-                                  onClick={handleUpdateVideo}
-                                  className="w-full bg-primary hover:bg-primary/90 text-primary-foreground h-9"
-                                >
-                                  <Save className="w-4 h-4 mr-2" />
-                                  Salvar Alterações
-                                </Button>
-                              </div>
+                              <VideoForm 
+                                video={editingVideo}
+                                onChange={(updates) => setEditingVideo({ ...editingVideo, ...updates })}
+                                onSave={handleUpdateVideo}
+                                saveLabel="Salvar Alterações"
+                              />
                             )}
                           </DialogContent>
                         </Dialog>
