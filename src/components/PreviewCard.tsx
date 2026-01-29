@@ -65,7 +65,7 @@ Please let me know how to proceed with payment.`;
       {/* Video/Thumbnail */}
       <div className="relative aspect-video bg-muted overflow-hidden">
         <AnimatePresence mode="wait">
-          {isPlaying && videoUrl && !isVip ? (
+          {isPlaying && videoUrl ? (
             <motion.video
               key="video"
               initial={{ opacity: 0 }}
@@ -81,7 +81,7 @@ Please let me know how to proceed with payment.`;
               <motion.img
                 src={thumbnail}
                 alt={title}
-                className={`w-full h-full object-cover ${isVip ? 'blur-md opacity-60' : ''}`}
+                className="w-full h-full object-cover"
                 animate={{ scale: isHovered ? 1.08 : 1 }}
                 transition={{ duration: 0.5, ease: "easeOut" }}
               />
@@ -138,27 +138,25 @@ Please let me know how to proceed with payment.`;
                 </span>
               </motion.div>
               
-              {/* Play overlay on hover - only for non-VIP */}
-              {!isVip && (
-                <motion.button
-                  onClick={() => videoUrl && setIsPlaying(true)}
-                  className="absolute inset-0 flex items-center justify-center bg-foreground/0"
-                  animate={{ backgroundColor: isHovered ? "rgba(0,0,0,0.2)" : "rgba(0,0,0,0)" }}
-                  transition={{ duration: 0.3 }}
+              {/* Play overlay on hover */}
+              <motion.button
+                onClick={() => videoUrl && setIsPlaying(true)}
+                className="absolute inset-0 flex items-center justify-center bg-foreground/0"
+                animate={{ backgroundColor: isHovered ? "rgba(0,0,0,0.2)" : "rgba(0,0,0,0)" }}
+                transition={{ duration: 0.3 }}
+              >
+                <motion.div 
+                  className="w-16 h-16 rounded-full bg-white/95 flex items-center justify-center shadow-xl"
+                  initial={{ opacity: 0, scale: 0.5 }}
+                  animate={{ 
+                    opacity: isHovered ? 1 : 0, 
+                    scale: isHovered ? 1 : 0.5 
+                  }}
+                  transition={{ duration: 0.3, ease: "backOut" }}
                 >
-                  <motion.div 
-                    className="w-16 h-16 rounded-full bg-white/95 flex items-center justify-center shadow-xl"
-                    initial={{ opacity: 0, scale: 0.5 }}
-                    animate={{ 
-                      opacity: isHovered ? 1 : 0, 
-                      scale: isHovered ? 1 : 0.5 
-                    }}
-                    transition={{ duration: 0.3, ease: "backOut" }}
-                  >
-                    <Play className="w-7 h-7 text-foreground ml-1" fill="currentColor" />
-                  </motion.div>
-                </motion.button>
-              )}
+                  <Play className="w-7 h-7 text-foreground ml-1" fill="currentColor" />
+                </motion.div>
+              </motion.button>
             </motion.div>
           )}
         </AnimatePresence>
@@ -179,17 +177,16 @@ Please let me know how to proceed with payment.`;
 
         {/* Action Buttons - 3 columns like reference site */}
         <div className="grid grid-cols-3 gap-1.5 pt-1">
-          {/* Preview Button - disabled for VIP */}
-          <motion.div whileHover={{ scale: isVip ? 1 : 1.02 }} whileTap={{ scale: isVip ? 1 : 0.98 }}>
+          {/* Preview Button */}
+          <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
             <Button 
               size="sm" 
               variant="outline"
-              className={`gap-1 w-full text-xs h-8 ${isVip ? 'opacity-50 cursor-not-allowed' : ''}`}
-              onClick={() => !isVip && videoUrl && setIsPlaying(true)}
-              disabled={isVip}
+              className="gap-1 w-full text-xs h-8"
+              onClick={() => videoUrl && setIsPlaying(true)}
             >
-              {isVip ? <Lock className="w-3 h-3" /> : <Play className="w-3 h-3" />}
-              {isVip ? 'Locked' : 'Preview'}
+              <Play className="w-3 h-3" />
+              Preview
             </Button>
           </motion.div>
 
