@@ -22,6 +22,7 @@ import {
 import { Plus, Trash2, Edit, Settings, Video, Save, Shield, Link, CreditCard, MessageCircle } from "lucide-react";
 import { useContentStore, Video as VideoType } from "@/stores/contentStore";
 import { toast } from "sonner";
+import { ThumbnailUpload } from "@/components/admin/ThumbnailUpload";
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -135,14 +136,10 @@ const Admin = () => {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label className="text-sm">URL da Thumbnail</Label>
-                  <Input
+                  <Label className="text-sm">Thumbnail</Label>
+                  <ThumbnailUpload
                     value={newVideo.thumbnail}
-                    onChange={(e) =>
-                      setNewVideo({ ...newVideo, thumbnail: e.target.value })
-                    }
-                    placeholder="https://imgur.com/..."
-                    className="bg-background/50"
+                    onChange={(url) => setNewVideo({ ...newVideo, thumbnail: url })}
                   />
                 </div>
                 <div className="space-y-2">
@@ -289,16 +286,12 @@ const Admin = () => {
                                   />
                                 </div>
                                 <div className="space-y-2">
-                                  <Label className="text-sm">URL da Thumbnail</Label>
-                                  <Input
+                                  <Label className="text-sm">Thumbnail</Label>
+                                  <ThumbnailUpload
                                     value={editingVideo.thumbnail}
-                                    onChange={(e) =>
-                                      setEditingVideo({
-                                        ...editingVideo,
-                                        thumbnail: e.target.value,
-                                      })
+                                    onChange={(url) =>
+                                      setEditingVideo({ ...editingVideo, thumbnail: url })
                                     }
-                                    className="bg-background/50"
                                   />
                                 </div>
                                 <div className="space-y-2">
