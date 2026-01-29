@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Play, Send, CreditCard } from "lucide-react";
+import { Play, Send, CreditCard, Lock } from "lucide-react";
 import { useState } from "react";
 
 interface PreviewCardProps {
@@ -17,7 +17,7 @@ export const PreviewCard = ({ id, title, thumbnail, videoUrl }: PreviewCardProps
   return (
     <div className="glass-card overflow-hidden hover-lift group">
       {/* Video/Thumbnail */}
-      <div className="relative aspect-video bg-muted">
+      <div className="relative aspect-video bg-muted overflow-hidden">
         {isPlaying && videoUrl ? (
           <video
             src={videoUrl}
@@ -30,17 +30,25 @@ export const PreviewCard = ({ id, title, thumbnail, videoUrl }: PreviewCardProps
             <img
               src={thumbnail}
               alt={title}
-              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+              className="w-full h-full object-cover transition-all duration-700 group-hover:scale-110 group-hover:brightness-110"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/20 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent" />
+            
+            {/* VIP Badge */}
+            <div className="absolute top-3 right-3">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-background/80 backdrop-blur-sm text-xs font-semibold border border-border/50">
+                <Lock className="w-3 h-3 text-primary" />
+                Premium
+              </span>
+            </div>
             
             {/* Play overlay */}
             <button
               onClick={() => setIsPlaying(true)}
-              className="absolute inset-0 flex items-center justify-center"
+              className="absolute inset-0 flex items-center justify-center group/play"
             >
-              <div className="w-16 h-16 rounded-full gradient-primary flex items-center justify-center glow-primary transition-transform hover:scale-110">
-                <Play className="w-7 h-7 text-primary-foreground ml-1" />
+              <div className="w-20 h-20 rounded-full gradient-primary flex items-center justify-center glow-primary-lg transition-all duration-300 group-hover/play:scale-110">
+                <Play className="w-9 h-9 text-primary-foreground ml-1" fill="currentColor" />
               </div>
             </button>
           </>
@@ -48,48 +56,49 @@ export const PreviewCard = ({ id, title, thumbnail, videoUrl }: PreviewCardProps
       </div>
 
       {/* Content */}
-      <div className="p-5 space-y-4">
-        <h3 className="text-lg font-semibold line-clamp-2">{title}</h3>
+      <div className="p-6 space-y-5">
+        <h3 className="text-xl font-bold line-clamp-2 leading-tight">{title}</h3>
 
         {/* Action Buttons */}
-        <div className="flex flex-wrap gap-2">
+        <div className="grid grid-cols-3 gap-2">
           <Button
             variant="outline"
             size="sm"
             onClick={() => setIsPlaying(true)}
-            className="gap-1.5 flex-1"
+            className="gap-1.5 h-11 border-border/50 hover:bg-secondary/80"
           >
             <Play className="w-4 h-4" />
-            Preview
+            <span className="hidden sm:inline">Preview</span>
           </Button>
-          <a href={TELEGRAM_LINK} target="_blank" rel="noopener noreferrer" className="flex-1">
-            <Button size="sm" className="btn-telegram gap-1.5 w-full">
+          <a href={TELEGRAM_LINK} target="_blank" rel="noopener noreferrer">
+            <Button size="sm" className="btn-telegram gap-1.5 w-full h-11">
               <Send className="w-4 h-4" />
-              Telegram
+              <span className="hidden sm:inline">Telegram</span>
             </Button>
           </a>
           <Button
             size="sm"
-            className="gradient-primary text-primary-foreground gap-1.5 flex-1"
+            className="btn-premium text-primary-foreground gap-1.5 h-11"
           >
             <CreditCard className="w-4 h-4" />
-            Pay Now
+            <span className="hidden sm:inline">Pagar</span>
           </Button>
         </div>
 
         {/* Payment Methods */}
-        <div className="pt-3 border-t border-border/50">
-          <p className="text-xs text-muted-foreground mb-2">Payment methods:</p>
-          <div className="flex gap-2">
-            <span className="text-xs px-2 py-1 rounded bg-secondary text-secondary-foreground">
-              Stripe
-            </span>
-            <span className="text-xs px-2 py-1 rounded bg-secondary text-secondary-foreground">
-              PayPal
-            </span>
+        <div className="pt-4 border-t border-border/30">
+          <div className="flex items-center justify-between">
+            <div className="flex gap-2">
+              <span className="text-xs px-3 py-1.5 rounded-full bg-secondary/80 text-secondary-foreground font-medium">
+                Stripe
+              </span>
+              <span className="text-xs px-3 py-1.5 rounded-full bg-secondary/80 text-secondary-foreground font-medium">
+                PayPal
+              </span>
+            </div>
           </div>
-          <p className="text-xs text-muted-foreground mt-2 italic">
-            After payment, send proof via Telegram to get access.
+          <p className="text-xs text-muted-foreground mt-3">
+            💬 Envie comprovante via Telegram para acesso.
           </p>
         </div>
       </div>
