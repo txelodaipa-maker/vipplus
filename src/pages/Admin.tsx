@@ -47,6 +47,7 @@ const Admin = () => {
     title: "",
     thumbnail: "",
     videoUrl: "",
+    paymentLink: "",
     isVip: false,
     isActive: true,
     stripeEnabled: true,
@@ -65,6 +66,7 @@ const Admin = () => {
       title: "",
       thumbnail: "",
       videoUrl: "",
+      paymentLink: "",
       isVip: false,
       isActive: true,
       stripeEnabled: true,
@@ -148,6 +150,17 @@ const Admin = () => {
                   <VideoUpload
                     value={newVideo.videoUrl}
                     onChange={(url) => setNewVideo({ ...newVideo, videoUrl: url })}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label className="text-sm">Link de Pagamento</Label>
+                  <Input
+                    value={newVideo.paymentLink}
+                    onChange={(e) =>
+                      setNewVideo({ ...newVideo, paymentLink: e.target.value })
+                    }
+                    placeholder="https://buy.stripe.com/..."
+                    className="bg-background/50"
                   />
                 </div>
                 <div className="grid grid-cols-2 gap-4 pt-2">
@@ -298,6 +311,20 @@ const Admin = () => {
                                     onChange={(url) =>
                                       setEditingVideo({ ...editingVideo, videoUrl: url })
                                     }
+                                  />
+                                </div>
+                                <div className="space-y-2">
+                                  <Label className="text-sm">Link de Pagamento</Label>
+                                  <Input
+                                    value={editingVideo.paymentLink}
+                                    onChange={(e) =>
+                                      setEditingVideo({
+                                        ...editingVideo,
+                                        paymentLink: e.target.value,
+                                      })
+                                    }
+                                    placeholder="https://buy.stripe.com/..."
+                                    className="bg-background/50"
                                   />
                                 </div>
                                 <div className="grid grid-cols-2 gap-3">
