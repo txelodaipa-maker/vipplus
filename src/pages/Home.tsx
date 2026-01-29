@@ -9,7 +9,9 @@ import { AnimatedButton, FloatingElement, PulseElement } from "@/components/anim
 
 const Home = () => {
   const { videos, settings } = useContentStore();
-  const previewVideos = videos.filter((v) => v.isActive && !v.isVip);
+  const activeVideos = videos.filter((v) => v.isActive);
+  const vipVideos = activeVideos.filter((v) => v.isVip);
+  const previewVideos = activeVideos.filter((v) => !v.isVip);
 
   // Calculate stats from videos
   const minPrice = videos.length > 0 ? Math.min(...videos.map(v => v.price || 25)) : 25;
@@ -204,9 +206,54 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Video Grid */}
+      {/* VIP Videos - Top Section */}
+      {vipVideos.length > 0 && (
+        <section className="py-12 bg-card/50 border-b border-border">
+          <div className="container mx-auto px-4">
+            <AnimatedSection>
+              <div className="flex items-center gap-3 mb-6">
+                <h2 className="text-xl font-bold">🔥 VIP Exclusive</h2>
+                <motion.span 
+                  className="price-badge text-xs"
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ delay: 0.3, type: "spring" }}
+                >
+                  PREMIUM
+                </motion.span>
+              </div>
+            </AnimatedSection>
+            <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {vipVideos.map((video) => (
+                <StaggerItem key={video.id}>
+                  <PreviewCard
+                    id={video.id}
+                    title={video.title}
+                    description={video.description}
+                    thumbnail={video.thumbnail}
+                    videoUrl={video.videoUrl}
+                    paymentLink={video.paymentLink}
+                    price={video.price}
+                    views={video.views}
+                    duration={video.duration}
+                    addedTime={video.addedAt}
+                    isVip={true}
+                  />
+                </StaggerItem>
+              ))}
+            </StaggerContainer>
+          </div>
+        </section>
+      )}
+
+      {/* Preview Videos */}
       <section className="py-12">
         <div className="container mx-auto px-4">
+          {previewVideos.length > 0 && (
+            <AnimatedSection>
+              <h2 className="text-xl font-bold mb-6">Preview Videos</h2>
+            </AnimatedSection>
+          )}
           <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {previewVideos.map((video) => (
               <StaggerItem key={video.id}>
@@ -226,7 +273,7 @@ const Home = () => {
             ))}
           </StaggerContainer>
 
-          {previewVideos.length === 0 && (
+          {activeVideos.length === 0 && (
             <AnimatedSection className="text-center py-16">
               <div className="glass-card p-12 max-w-md mx-auto">
                 <Eye className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />

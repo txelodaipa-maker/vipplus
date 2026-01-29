@@ -1,10 +1,10 @@
 import { Button } from "@/components/ui/button";
-import { Play, Send, CreditCard, Eye, Clock } from "lucide-react";
+import { Play, Send, CreditCard, Eye, Clock, Lock } from "lucide-react";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useContentStore } from "@/stores/contentStore";
 
-interface PreviewCardProps {
+export interface PreviewCardProps {
   id: string;
   title: string;
   description?: string;
@@ -15,6 +15,7 @@ interface PreviewCardProps {
   views?: string;
   duration?: string;
   addedTime?: string;
+  isVip?: boolean;
 }
 
 export const PreviewCard = ({ 
@@ -27,7 +28,8 @@ export const PreviewCard = ({
   price = 30,
   views = "1.2K",
   duration = "1min 30s",
-  addedTime = "2 weeks ago"
+  addedTime = "2 weeks ago",
+  isVip = false
 }: PreviewCardProps) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
@@ -63,7 +65,7 @@ Please let me know how to proceed with payment.`;
       {/* Video/Thumbnail */}
       <div className="relative aspect-video bg-muted overflow-hidden">
         <AnimatePresence mode="wait">
-          {isPlaying && videoUrl ? (
+          {isPlaying && videoUrl && !isVip ? (
             <motion.video
               key="video"
               initial={{ opacity: 0 }}
@@ -79,10 +81,27 @@ Please let me know how to proceed with payment.`;
               <motion.img
                 src={thumbnail}
                 alt={title}
-                className="w-full h-full object-cover"
+                className={`w-full h-full object-cover ${isVip ? 'blur-md opacity-60' : ''}`}
                 animate={{ scale: isHovered ? 1.08 : 1 }}
                 transition={{ duration: 0.5, ease: "easeOut" }}
               />
+              
+              {/* VIP Lock Overlay */}
+              {isVip && (
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <motion.div 
+                    className="text-center space-y-2"
+                    initial={{ scale: 0.8 }}
+                    whileHover={{ scale: 1.1 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <div className="w-14 h-14 mx-auto rounded-full bg-muted/80 backdrop-blur-sm flex items-center justify-center border border-border">
+                      <Lock className="w-6 h-6 text-primary" />
+                    </div>
+                    <p className="text-xs font-medium text-primary">VIP Only</p>
+                  </motion.div>
+                </div>
+              )}
               
               {/* Price Badge */}
               <motion.div 
@@ -91,8 +110,20 @@ Please let me know how to proceed with payment.`;
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.1 }}
               >
-                <span className="price-badge">${price.toFixed(2)}</span>
+                <span className={`price-badge ${isVip ? 'bg-amber-500/90' : ''}`}>${price.toFixed(2)}</span>
               </motion.div>
+
+              {/* VIP Badge */}
+              {isVip && (
+                <motion.div 
+                  className="absolute top-3 left-3"
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.15 }}
+                >
+                  <span className="px-2 py-1 rounded-md text-xs font-bold bg-amber-500/90 text-white">VIP</span>
+                </motion.div>
+              )}
               
               {/* Duration Badge */}
               <motion.div 
@@ -107,25 +138,27 @@ Please let me know how to proceed with payment.`;
                 </span>
               </motion.div>
               
-              {/* Play overlay on hover */}
-              <motion.button
-                onClick={() => videoUrl && setIsPlaying(true)}
-                className="absolute inset-0 flex items-center justify-center bg-foreground/0"
-                animate={{ backgroundColor: isHovered ? "rgba(0,0,0,0.2)" : "rgba(0,0,0,0)" }}
-                transition={{ duration: 0.3 }}
-              >
-                <motion.div 
-                  className="w-16 h-16 rounded-full bg-white/95 flex items-center justify-center shadow-xl"
-                  initial={{ opacity: 0, scale: 0.5 }}
-                  animate={{ 
-                    opacity: isHovered ? 1 : 0, 
-                    scale: isHovered ? 1 : 0.5 
-                  }}
-                  transition={{ duration: 0.3, ease: "backOut" }}
+              {/* Play overlay on hover - only for non-VIP */}
+              {!isVip && (
+                <motion.button
+                  onClick={() => videoUrl && setIsPlaying(true)}
+                  className="absolute inset-0 flex items-center justify-center bg-foreground/0"
+                  animate={{ backgroundColor: isHovered ? "rgba(0,0,0,0.2)" : "rgba(0,0,0,0)" }}
+                  transition={{ duration: 0.3 }}
                 >
-                  <Play className="w-7 h-7 text-foreground ml-1" fill="currentColor" />
-                </motion.div>
-              </motion.button>
+                  <motion.div 
+                    className="w-16 h-16 rounded-full bg-white/95 flex items-center justify-center shadow-xl"
+                    initial={{ opacity: 0, scale: 0.5 }}
+                    animate={{ 
+                      opacity: isHovered ? 1 : 0, 
+                      scale: isHovered ? 1 : 0.5 
+                    }}
+                    transition={{ duration: 0.3, ease: "backOut" }}
+                  >
+                    <Play className="w-7 h-7 text-foreground ml-1" fill="currentColor" />
+                  </motion.div>
+                </motion.button>
+              )}
             </motion.div>
           )}
         </AnimatePresence>
@@ -146,16 +179,17 @@ Please let me know how to proceed with payment.`;
 
         {/* Action Buttons - 3 columns like reference site */}
         <div className="grid grid-cols-3 gap-1.5 pt-1">
-          {/* Preview Button */}
-          <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+          {/* Preview Button - disabled for VIP */}
+          <motion.div whileHover={{ scale: isVip ? 1 : 1.02 }} whileTap={{ scale: isVip ? 1 : 0.98 }}>
             <Button 
               size="sm" 
               variant="outline"
-              className="gap-1 w-full text-xs h-8"
-              onClick={() => videoUrl && setIsPlaying(true)}
+              className={`gap-1 w-full text-xs h-8 ${isVip ? 'opacity-50 cursor-not-allowed' : ''}`}
+              onClick={() => !isVip && videoUrl && setIsPlaying(true)}
+              disabled={isVip}
             >
-              <Play className="w-3 h-3" />
-              Preview
+              {isVip ? <Lock className="w-3 h-3" /> : <Play className="w-3 h-3" />}
+              {isVip ? 'Locked' : 'Preview'}
             </Button>
           </motion.div>
 
