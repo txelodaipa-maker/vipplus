@@ -4,6 +4,7 @@ import { persist } from "zustand/middleware";
 export interface Video {
   id: string;
   title: string;
+  description: string;
   thumbnail: string;
   videoUrl: string;
   paymentLink: string;
@@ -33,7 +34,8 @@ interface ContentStore {
 const defaultVideos: Video[] = [
   {
     id: "1",
-    title: "Premium Collection Vol. 1 - Exclusive Content",
+    title: "Premium Collection Vol. 1",
+    description: "Exclusive Content - Limited Edition",
     thumbnail: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&q=80",
     videoUrl: "",
     paymentLink: "",
@@ -45,7 +47,8 @@ const defaultVideos: Video[] = [
   },
   {
     id: "2",
-    title: "VIP Special - Behind The Scenes",
+    title: "VIP Special",
+    description: "Behind The Scenes - Exclusive Access",
     thumbnail: "https://images.unsplash.com/photo-1557682250-33bd709cbe85?w=800&q=80",
     videoUrl: "",
     paymentLink: "",
@@ -57,7 +60,8 @@ const defaultVideos: Video[] = [
   },
   {
     id: "3",
-    title: "Exclusive Release - Limited Edition",
+    title: "Exclusive Release",
+    description: "Limited Edition - Premium Quality",
     thumbnail: "https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=800&q=80",
     videoUrl: "",
     paymentLink: "",
