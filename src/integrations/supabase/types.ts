@@ -55,6 +55,7 @@ export type Database = {
           duration: string | null
           id: string
           is_active: boolean | null
+          is_exclusive: boolean | null
           is_vip: boolean | null
           payment_link: string | null
           paypal_enabled: boolean | null
@@ -73,6 +74,7 @@ export type Database = {
           duration?: string | null
           id?: string
           is_active?: boolean | null
+          is_exclusive?: boolean | null
           is_vip?: boolean | null
           payment_link?: string | null
           paypal_enabled?: boolean | null
@@ -91,6 +93,7 @@ export type Database = {
           duration?: string | null
           id?: string
           is_active?: boolean | null
+          is_exclusive?: boolean | null
           is_vip?: boolean | null
           payment_link?: string | null
           paypal_enabled?: boolean | null

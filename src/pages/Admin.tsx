@@ -58,6 +58,7 @@ const Admin = () => {
     duration: "0:00",
     addedAt: "Just now",
     isVip: false,
+    isExclusive: false,
     isActive: true,
     stripeEnabled: true,
     paypalEnabled: true,
@@ -94,6 +95,7 @@ const Admin = () => {
       duration: newVideo.duration || "0:00",
       addedAt: newVideo.addedAt || "Just now",
       isVip: newVideo.isVip ?? false,
+      isExclusive: newVideo.isExclusive ?? false,
       isActive: newVideo.isActive ?? true,
       stripeEnabled: newVideo.stripeEnabled ?? true,
       paypalEnabled: newVideo.paypalEnabled ?? true,
@@ -206,15 +208,23 @@ const Admin = () => {
                         <span className="text-muted-foreground">{video.views || "0"}</span>
                       </TableCell>
                       <TableCell>
-                        <span
-                          className={`text-xs px-2.5 py-1 rounded-full font-medium ${
-                            video.isVip
-                              ? "bg-amber-500/20 text-amber-400"
-                              : "bg-primary/20 text-primary"
-                          }`}
-                        >
-                          {video.isVip ? "VIP" : "Preview"}
-                        </span>
+                        <div className="flex gap-1">
+                          {video.isVip && (
+                            <span className="text-xs px-2 py-0.5 rounded-full font-medium bg-amber-500/20 text-amber-400">
+                              VIP
+                            </span>
+                          )}
+                          {video.isExclusive && (
+                            <span className="text-xs px-2 py-0.5 rounded-full font-medium bg-primary/20 text-primary">
+                              Exclusive
+                            </span>
+                          )}
+                          {!video.isVip && !video.isExclusive && (
+                            <span className="text-xs px-2 py-0.5 rounded-full font-medium bg-muted text-muted-foreground">
+                              Preview
+                            </span>
+                          )}
+                        </div>
                       </TableCell>
                       <TableCell>
                         <span
