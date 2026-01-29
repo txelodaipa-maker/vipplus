@@ -200,8 +200,8 @@ Please let me know how to proceed with payment.`;
             </motion.div>
           </a>
 
-          {/* Pay Button - redirects directly */}
-          <a href={paymentLink || "#"}>
+          {/* Pay Button - opens in new tab */}
+          <a href={paymentLink || "#"} target="_blank" rel="noopener noreferrer">
             <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
               <Button size="sm" className="btn-pay gap-1 text-xs h-8 w-full">
                 <CreditCard className="w-3 h-3" />
