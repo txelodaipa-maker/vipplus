@@ -6,6 +6,7 @@ export interface Video {
   title: string;
   thumbnail: string;
   videoUrl: string;
+  paymentLink: string;
   isVip: boolean;
   isActive: boolean;
   stripeEnabled: boolean;
@@ -35,6 +36,7 @@ const defaultVideos: Video[] = [
     title: "Premium Collection Vol. 1 - Exclusive Content",
     thumbnail: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&q=80",
     videoUrl: "",
+    paymentLink: "",
     isVip: false,
     isActive: true,
     stripeEnabled: true,
@@ -46,6 +48,7 @@ const defaultVideos: Video[] = [
     title: "VIP Special - Behind The Scenes",
     thumbnail: "https://images.unsplash.com/photo-1557682250-33bd709cbe85?w=800&q=80",
     videoUrl: "",
+    paymentLink: "",
     isVip: true,
     isActive: true,
     stripeEnabled: true,
@@ -57,6 +60,7 @@ const defaultVideos: Video[] = [
     title: "Exclusive Release - Limited Edition",
     thumbnail: "https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=800&q=80",
     videoUrl: "",
+    paymentLink: "",
     isVip: false,
     isActive: true,
     stripeEnabled: true,
