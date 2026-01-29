@@ -193,13 +193,15 @@ const Home = () => {
       <section className="py-12">
         <div className="container mx-auto px-4">
           <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {previewVideos.map((video, index) => (
+            {previewVideos.map((video) => (
               <StaggerItem key={video.id}>
                 <PreviewCard
                   id={video.id}
                   title={video.title}
+                  description={video.description}
                   thumbnail={video.thumbnail}
                   videoUrl={video.videoUrl}
+                  paymentLink={video.paymentLink}
                   price={29.99}
                   views="2.5K"
                   duration="2min 30s"

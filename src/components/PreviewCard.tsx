@@ -6,21 +6,25 @@ import { motion, AnimatePresence } from "framer-motion";
 interface PreviewCardProps {
   id: string;
   title: string;
+  description?: string;
   thumbnail: string;
   videoUrl?: string;
+  paymentLink?: string;
   price?: number;
   views?: string;
   duration?: string;
   addedTime?: string;
 }
 
-const TELEGRAM_LINK = "https://t.me/videosplus";
+
 
 export const PreviewCard = ({ 
   id, 
   title, 
+  description,
   thumbnail, 
   videoUrl, 
+  paymentLink,
   price = 30,
   views = "1.2K",
   duration = "1min 30s",
@@ -28,6 +32,7 @@ export const PreviewCard = ({
 }: PreviewCardProps) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
+  const telegramLink = "https://t.me/videosplus";
 
   return (
     <motion.div 
@@ -109,48 +114,38 @@ export const PreviewCard = ({
       </div>
 
       {/* Content */}
-      <div className="p-4 space-y-3">
-        <h3 className="font-semibold line-clamp-2 text-sm leading-tight">{title}</h3>
+      <div className="p-3 space-y-2">
+        <h3 className="font-semibold line-clamp-1 text-sm leading-tight">{title}</h3>
+        {description && (
+          <p className="text-xs text-muted-foreground line-clamp-1">{description}</p>
+        )}
 
         {/* Stats */}
         <div className="flex items-center justify-between text-xs text-muted-foreground">
           <div className="flex items-center gap-1">
-            <Eye className="w-3.5 h-3.5" />
-            <span>{views} views</span>
+            <Eye className="w-3 h-3" />
+            <span>{views}</span>
           </div>
           <span>{addedTime}</span>
         </div>
 
-        {/* Action Buttons */}
-        <div className="grid grid-cols-3 gap-2 pt-1">
-          <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setIsPlaying(true)}
-              className="gap-1 text-xs h-9 w-full"
-            >
-              <Play className="w-3.5 h-3.5" />
-              Preview
-            </Button>
-          </motion.div>
-          <a href={TELEGRAM_LINK} target="_blank" rel="noopener noreferrer">
+        <div className="grid grid-cols-2 gap-2 pt-1">
+          <a href={telegramLink} target="_blank" rel="noopener noreferrer">
             <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} className="h-full">
-              <Button size="sm" className="btn-telegram gap-1 w-full text-xs h-9">
-                <Send className="w-3.5 h-3.5" />
+              <Button size="sm" className="btn-telegram gap-1 w-full text-xs h-8">
+                <Send className="w-3 h-3" />
                 Telegram
               </Button>
             </motion.div>
           </a>
-          <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-            <Button
-              size="sm"
-              className="btn-pay gap-1 text-xs h-9 w-full"
-            >
-              <CreditCard className="w-3.5 h-3.5" />
-              Pay
-            </Button>
-          </motion.div>
+          <a href={paymentLink || "#"} target="_blank" rel="noopener noreferrer">
+            <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+              <Button size="sm" className="btn-pay gap-1 text-xs h-8 w-full">
+                <CreditCard className="w-3 h-3" />
+                Pay
+              </Button>
+            </motion.div>
+          </a>
         </div>
       </div>
     </motion.div>
