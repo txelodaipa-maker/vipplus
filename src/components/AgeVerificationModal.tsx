@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { ShieldAlert } from "lucide-react";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { AlertTriangle, CheckCircle, XCircle } from "lucide-react";
 
 export const AgeVerificationModal = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -24,37 +24,50 @@ export const AgeVerificationModal = () => {
 
   return (
     <Dialog open={isOpen} onOpenChange={() => {}}>
-      <DialogContent className="glass-card border-primary/20 max-w-md" hideCloseButton>
-        <DialogHeader className="text-center space-y-4">
-          <div className="mx-auto w-16 h-16 rounded-full gradient-primary flex items-center justify-center glow-primary">
-            <ShieldAlert className="w-8 h-8 text-primary-foreground" />
+      <DialogContent className="max-w-lg p-0 overflow-hidden border-0" hideCloseButton>
+        {/* Header */}
+        <div className="gradient-hero p-8 text-center text-white">
+          <div className="flex justify-center items-center gap-4 mb-4">
+            <div className="w-10 h-10 rounded-full bg-warning flex items-center justify-center">
+              <span className="text-warning-foreground text-lg">⚠</span>
+            </div>
           </div>
-          <DialogTitle className="text-2xl font-bold">Age Verification Required</DialogTitle>
-        </DialogHeader>
-        
-        <div className="space-y-6 pt-4">
-          <p className="text-center text-muted-foreground leading-relaxed">
-            <span className="text-foreground font-semibold">Adult content (18+).</span> By accessing this site, you confirm you are at least 18 years old.
+          <h2 className="text-3xl font-bold tracking-wide flex items-center justify-center gap-3">
+            <span className="w-8 h-8 rounded-full bg-white/20"></span>
+            AGE VERIFICATION
+            <span className="w-8 h-8 rounded-full bg-warning"></span>
+          </h2>
+        </div>
+
+        {/* Warning Banner */}
+        <div className="gradient-hero py-4 text-center">
+          <p className="text-white font-bold tracking-widest text-lg">
+            ADULT CONTENT - 18+ ONLY
           </p>
-          
-          <div className="flex flex-col gap-3">
+        </div>
+        
+        {/* Buttons */}
+        <div className="p-8 bg-card space-y-4">
+          <div className="flex gap-4">
             <Button 
               onClick={handleVerify}
-              className="w-full gradient-primary text-primary-foreground font-semibold py-6 text-lg glow-primary hover:opacity-90 transition-opacity"
+              className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-6 text-base gap-2"
             >
-              I am 18+
+              <CheckCircle className="w-5 h-5" />
+              YES, I AM 18+
             </Button>
             <Button 
               onClick={handleLeave}
               variant="outline"
-              className="w-full py-6 text-lg border-border hover:bg-muted"
+              className="flex-1 border-2 border-muted-foreground/30 hover:bg-muted py-6 text-base font-bold gap-2"
             >
-              Leave
+              <XCircle className="w-5 h-5" />
+              NO, UNDER 18
             </Button>
           </div>
           
-          <p className="text-xs text-muted-foreground text-center">
-            By entering, you agree to our Terms of Service and Privacy Policy.
+          <p className="text-xs text-muted-foreground text-center pt-2">
+            By entering, you confirm you are at least 18 years old and agree to our Terms of Service.
           </p>
         </div>
       </DialogContent>
