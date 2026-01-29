@@ -6,13 +6,34 @@ import { toast } from "sonner";
 
 interface VideoUploadProps {
   value: string;
-  onChange: (url: string) => void;
+  onChange: (url: string, duration?: string) => void;
 }
+
+const formatDuration = (seconds: number): string => {
+  const mins = Math.floor(seconds / 60);
+  const secs = Math.floor(seconds % 60);
+  return `${mins}:${secs.toString().padStart(2, "0")}`;
+};
 
 export const VideoUpload = ({ value, onChange }: VideoUploadProps) => {
   const [isUploading, setIsUploading] = useState(false);
   const [preview, setPreview] = useState<string>(value);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const extractDuration = (file: File): Promise<string> => {
+    return new Promise((resolve) => {
+      const video = document.createElement("video");
+      video.preload = "metadata";
+      video.onloadedmetadata = () => {
+        URL.revokeObjectURL(video.src);
+        resolve(formatDuration(video.duration));
+      };
+      video.onerror = () => {
+        resolve("0:00");
+      };
+      video.src = URL.createObjectURL(file);
+    });
+  };
 
   const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -31,6 +52,9 @@ export const VideoUpload = ({ value, onChange }: VideoUploadProps) => {
     setIsUploading(true);
 
     try {
+      // Extract duration before uploading
+      const duration = await extractDuration(file);
+
       const fileExt = file.name.split(".").pop();
       const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
 
@@ -48,7 +72,7 @@ export const VideoUpload = ({ value, onChange }: VideoUploadProps) => {
         .getPublicUrl(fileName);
 
       setPreview(urlData.publicUrl);
-      onChange(urlData.publicUrl);
+      onChange(urlData.publicUrl, duration);
       toast.success("Vídeo enviado!");
     } catch (error: any) {
       console.error("Upload error:", error);
@@ -60,7 +84,7 @@ export const VideoUpload = ({ value, onChange }: VideoUploadProps) => {
 
   const handleRemove = () => {
     setPreview("");
-    onChange("");
+    onChange("", undefined);
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
