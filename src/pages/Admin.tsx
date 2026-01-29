@@ -45,6 +45,7 @@ const Admin = () => {
   const [editingVideo, setEditingVideo] = useState<VideoType | null>(null);
   const [newVideo, setNewVideo] = useState({
     title: "",
+    description: "",
     thumbnail: "",
     videoUrl: "",
     paymentLink: "",
@@ -64,6 +65,7 @@ const Admin = () => {
     addVideo(newVideo);
     setNewVideo({
       title: "",
+      description: "",
       thumbnail: "",
       videoUrl: "",
       paymentLink: "",
@@ -128,13 +130,24 @@ const Admin = () => {
               </DialogHeader>
               <div className="space-y-4 pt-4">
                 <div className="space-y-2">
-                  <Label className="text-sm">Título do Vídeo</Label>
+                  <Label className="text-sm">Título</Label>
                   <Input
                     value={newVideo.title}
                     onChange={(e) =>
                       setNewVideo({ ...newVideo, title: e.target.value })
                     }
                     placeholder="Ex: Premium Collection Vol. 1"
+                    className="bg-background/50"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label className="text-sm">Descrição</Label>
+                  <Input
+                    value={newVideo.description}
+                    onChange={(e) =>
+                      setNewVideo({ ...newVideo, description: e.target.value })
+                    }
+                    placeholder="Descrição do conteúdo..."
                     className="bg-background/50"
                   />
                 </div>
@@ -290,6 +303,19 @@ const Admin = () => {
                                       setEditingVideo({
                                         ...editingVideo,
                                         title: e.target.value,
+                                      })
+                                    }
+                                    className="bg-background/50"
+                                  />
+                                </div>
+                                <div className="space-y-2">
+                                  <Label className="text-sm">Descrição</Label>
+                                  <Input
+                                    value={editingVideo.description}
+                                    onChange={(e) =>
+                                      setEditingVideo({
+                                        ...editingVideo,
+                                        description: e.target.value,
                                       })
                                     }
                                     className="bg-background/50"
