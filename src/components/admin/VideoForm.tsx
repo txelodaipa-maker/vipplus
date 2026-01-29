@@ -53,13 +53,17 @@ export const VideoForm = ({ video, onChange, onSave, saveLabel = "Salvar", isLoa
           <Label className="text-xs">Vídeo</Label>
           <VideoUpload
             value={video.videoUrl || ""}
-            onChange={(url) => onChange({ videoUrl: url })}
+            onChange={(url, duration) => {
+              const updates: Partial<typeof video> = { videoUrl: url };
+              if (duration) updates.duration = duration;
+              onChange(updates);
+            }}
           />
         </div>
       </div>
 
-      {/* Price, Views, Duration, AddedAt */}
-      <div className="grid grid-cols-4 gap-2">
+      {/* Price & Duration (read-only) */}
+      <div className="grid grid-cols-2 gap-3">
         <div className="space-y-1">
           <Label className="text-xs">Preço ($)</Label>
           <Input
@@ -71,30 +75,12 @@ export const VideoForm = ({ video, onChange, onSave, saveLabel = "Salvar", isLoa
           />
         </div>
         <div className="space-y-1">
-          <Label className="text-xs">Views</Label>
+          <Label className="text-xs">Duração (automático)</Label>
           <Input
-            value={video.views || ""}
-            onChange={(e) => onChange({ views: e.target.value })}
-            placeholder="2.5K"
-            className="bg-background/50 h-8 text-sm"
-          />
-        </div>
-        <div className="space-y-1">
-          <Label className="text-xs">Duração</Label>
-          <Input
-            value={video.duration || ""}
-            onChange={(e) => onChange({ duration: e.target.value })}
-            placeholder="1min 30s"
-            className="bg-background/50 h-8 text-sm"
-          />
-        </div>
-        <div className="space-y-1">
-          <Label className="text-xs">Adicionado</Label>
-          <Input
-            value={video.addedAt || ""}
-            onChange={(e) => onChange({ addedAt: e.target.value })}
-            placeholder="2 weeks ago"
-            className="bg-background/50 h-8 text-sm"
+            value={video.duration || "0:00"}
+            readOnly
+            disabled
+            className="bg-background/30 h-8 text-sm text-muted-foreground"
           />
         </div>
       </div>
