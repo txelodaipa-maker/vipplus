@@ -1,19 +1,28 @@
 import { Button } from "@/components/ui/button";
-import { Lock, Send, Star, Users, Eye, ArrowLeft } from "lucide-react";
-import { useContentStore } from "@/stores/contentStore";
+import { Lock, Send, Star, Users, Eye, ArrowLeft, Loader2 } from "lucide-react";
+import { useActiveVideos } from "@/hooks/useVideos";
+import { useSettings } from "@/hooks/useSettings";
 import { PreviewCard } from "@/components/PreviewCard";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { AnimatedSection, StaggerContainer, StaggerItem } from "@/components/animations/AnimatedSection";
 import { AnimatedButton, PulseElement } from "@/components/animations/AnimatedCard";
 
-const TELEGRAM_LINK = "https://t.me/videosplus";
-
 const Videos = () => {
-  const { videos, settings } = useContentStore();
-  const allVideos = videos.filter((v) => v.isActive);
-  const vipVideos = videos.filter((v) => v.isActive && v.isVip);
-  const previewVideos = videos.filter((v) => v.isActive && !v.isVip);
+  const { data: videos = [], isLoading } = useActiveVideos();
+  const { data: settings } = useSettings();
+  const allVideos = videos;
+  const vipVideos = videos.filter((v) => v.isVip);
+  const previewVideos = videos.filter((v) => !v.isVip);
+  const telegramLink = settings?.telegramLink || "https://t.me/videosplus";
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -154,7 +163,7 @@ const Videos = () => {
                       </div>
                       <span>2 weeks ago</span>
                     </div>
-                    <a href={TELEGRAM_LINK} target="_blank" rel="noopener noreferrer">
+                    <a href={telegramLink} target="_blank" rel="noopener noreferrer">
                       <AnimatedButton>
                         <Button size="sm" className="w-full btn-telegram gap-2 h-9">
                           <Send className="w-3.5 h-3.5" />
@@ -199,7 +208,7 @@ const Videos = () => {
                         <span>Hidden content</span>
                         <span>VIP access</span>
                       </div>
-                      <a href={TELEGRAM_LINK} target="_blank" rel="noopener noreferrer">
+                      <a href={telegramLink} target="_blank" rel="noopener noreferrer">
                         <AnimatedButton>
                           <Button size="sm" className="w-full btn-telegram gap-2 h-9">
                             <Send className="w-3.5 h-3.5" />
@@ -224,12 +233,12 @@ const Videos = () => {
               whileHover={{ scale: 1.01 }}
               transition={{ duration: 0.3 }}
             >
-              <h2 className="text-2xl font-bold">Get All Content for {settings.offerPrice}</h2>
+              <h2 className="text-2xl font-bold">Get All Content for {settings?.offerPrice || "$100"}</h2>
               <p className="text-muted-foreground">
                 Unlock all VIP content with a single payment. Contact us on Telegram for instant access.
               </p>
               <div className="flex flex-wrap justify-center gap-3">
-                <a href={TELEGRAM_LINK} target="_blank" rel="noopener noreferrer">
+                <a href={telegramLink} target="_blank" rel="noopener noreferrer">
                   <AnimatedButton>
                     <Button size="lg" className="btn-telegram gap-2">
                       <Send className="w-4 h-4" />

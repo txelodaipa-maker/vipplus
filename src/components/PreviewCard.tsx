@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Play, Send, CreditCard, Eye, Clock, Lock } from "lucide-react";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useContentStore } from "@/stores/contentStore";
+import { useSettings } from "@/hooks/useSettings";
 
 export interface PreviewCardProps {
   id: string;
@@ -33,7 +33,7 @@ export const PreviewCard = ({
 }: PreviewCardProps) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
-  const { settings } = useContentStore();
+  const { data: settings } = useSettings();
 
   // Generate Telegram message with video details
   const generateTelegramMessage = () => {
@@ -52,7 +52,7 @@ Please let me know how to proceed with payment.`;
     return encodeURIComponent(message);
   };
 
-  const telegramLink = `${settings.telegramLink}?text=${generateTelegramMessage()}`;
+  const telegramLink = `${settings?.telegramLink || "https://t.me/videosplus"}?text=${generateTelegramMessage()}`;
 
   return (
     <motion.div 
