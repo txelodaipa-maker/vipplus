@@ -1,8 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import {
   Dialog,
   DialogContent,
@@ -18,10 +17,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Plus, Trash2, Edit, Settings, Video, Save, Shield, Link, CreditCard, MessageCircle } from "lucide-react";
-import { useContentStore, Video as VideoType } from "@/stores/contentStore";
-import { toast } from "sonner";
+import { Plus, Trash2, Edit, Settings, Video, Save, Shield, Link, CreditCard, MessageCircle, Loader2 } from "lucide-react";
 import { VideoForm } from "@/components/admin/VideoForm";
+import { useVideos, useAddVideo, useUpdateVideo, useDeleteVideo, Video as VideoType } from "@/hooks/useVideos";
+import { useSettings, useUpdateSettings, Settings as SettingsType } from "@/hooks/useSettings";
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -37,10 +36,16 @@ const itemVariants = {
 };
 
 const Admin = () => {
-  const { videos, settings, addVideo, updateVideo, deleteVideo, updateSettings } =
-    useContentStore();
+  const { data: videos = [], isLoading: videosLoading } = useVideos();
+  const { data: settings, isLoading: settingsLoading } = useSettings();
+  const addVideoMutation = useAddVideo();
+  const updateVideoMutation = useUpdateVideo();
+  const deleteVideoMutation = useDeleteVideo();
+  const updateSettingsMutation = useUpdateSettings();
+
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [editingVideo, setEditingVideo] = useState<VideoType | null>(null);
+  
   const getDefaultVideo = (): Partial<VideoType> => ({
     title: "",
     description: "",
@@ -59,49 +64,70 @@ const Admin = () => {
   
   const [newVideo, setNewVideo] = useState<Partial<VideoType>>(getDefaultVideo());
 
-  const [localSettings, setLocalSettings] = useState(settings);
+  const [localSettings, setLocalSettings] = useState<SettingsType>({
+    telegramLink: "https://t.me/videosplus",
+    telegramUsername: "videosplus",
+    stripeLink: "",
+    paypalEmail: "",
+    offerPrice: "$100",
+  });
+
+  useEffect(() => {
+    if (settings) {
+      setLocalSettings(settings);
+    }
+  }, [settings]);
 
   const handleAddVideo = () => {
     if (!newVideo.title || !newVideo.thumbnail) {
-      toast.error("Preencha título e faça upload da thumbnail");
       return;
     }
-    addVideo({
+    addVideoMutation.mutate({
       title: newVideo.title || "",
       description: newVideo.description || "",
       thumbnail: newVideo.thumbnail || "",
       videoUrl: newVideo.videoUrl || "",
       paymentLink: newVideo.paymentLink || "",
       price: newVideo.price || 30,
-      views: newVideo.views || "1.0K",
-      duration: newVideo.duration || "1min 00s",
+      views: newVideo.views || "0",
+      duration: newVideo.duration || "0:00",
       addedAt: newVideo.addedAt || "Just now",
       isVip: newVideo.isVip ?? false,
       isActive: newVideo.isActive ?? true,
       stripeEnabled: newVideo.stripeEnabled ?? true,
       paypalEnabled: newVideo.paypalEnabled ?? true,
+    }, {
+      onSuccess: () => {
+        setNewVideo(getDefaultVideo());
+        setIsAddOpen(false);
+      }
     });
-    setNewVideo(getDefaultVideo());
-    setIsAddOpen(false);
-    toast.success("Vídeo adicionado com sucesso!");
   };
 
   const handleUpdateVideo = () => {
     if (!editingVideo) return;
-    updateVideo(editingVideo.id, editingVideo);
-    setEditingVideo(null);
-    toast.success("Vídeo atualizado com sucesso!");
+    updateVideoMutation.mutate({ id: editingVideo.id, updates: editingVideo }, {
+      onSuccess: () => {
+        setEditingVideo(null);
+      }
+    });
   };
 
   const handleDeleteVideo = (id: string) => {
-    deleteVideo(id);
-    toast.success("Vídeo removido com sucesso!");
+    deleteVideoMutation.mutate(id);
   };
 
   const handleSaveSettings = () => {
-    updateSettings(localSettings);
-    toast.success("Configurações salvas com sucesso!");
+    updateSettingsMutation.mutate(localSettings);
   };
+
+  if (videosLoading || settingsLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+      </div>
+    );
+  }
 
   return (
     <motion.div 
@@ -141,6 +167,7 @@ const Admin = () => {
                 onChange={(updates) => setNewVideo({ ...newVideo, ...updates })}
                 onSave={handleAddVideo}
                 saveLabel="Salvar Vídeo"
+                isLoading={addVideoMutation.isPending}
               />
             </DialogContent>
           </Dialog>
@@ -224,6 +251,7 @@ const Admin = () => {
                                 onChange={(updates) => setEditingVideo({ ...editingVideo, ...updates })}
                                 onSave={handleUpdateVideo}
                                 saveLabel="Salvar Alterações"
+                                isLoading={updateVideoMutation.isPending}
                               />
                             )}
                           </DialogContent>
@@ -233,6 +261,7 @@ const Admin = () => {
                           size="icon"
                           className="h-8 w-8 hover:bg-destructive/20 text-destructive"
                           onClick={() => handleDeleteVideo(video.id)}
+                          disabled={deleteVideoMutation.isPending}
                         >
                           <Trash2 className="w-4 h-4" />
                         </Button>
@@ -319,8 +348,16 @@ const Admin = () => {
           </div>
 
           <div className="mt-6 flex justify-end">
-            <Button onClick={handleSaveSettings} className="bg-primary hover:bg-primary/90 text-primary-foreground gap-2">
-              <Save className="w-4 h-4" />
+            <Button 
+              onClick={handleSaveSettings} 
+              className="bg-primary hover:bg-primary/90 text-primary-foreground gap-2"
+              disabled={updateSettingsMutation.isPending}
+            >
+              {updateSettingsMutation.isPending ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : (
+                <Save className="w-4 h-4" />
+              )}
               Salvar Configurações
             </Button>
           </div>

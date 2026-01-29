@@ -1,10 +1,9 @@
-import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
-import { Save } from "lucide-react";
-import { Video } from "@/stores/contentStore";
+import { Save, Loader2 } from "lucide-react";
+import { Video } from "@/hooks/useVideos";
 import { ThumbnailUpload } from "./ThumbnailUpload";
 import { VideoUpload } from "./VideoUpload";
 
@@ -13,9 +12,10 @@ interface VideoFormProps {
   onChange: (updates: Partial<Video>) => void;
   onSave: () => void;
   saveLabel?: string;
+  isLoading?: boolean;
 }
 
-export const VideoForm = ({ video, onChange, onSave, saveLabel = "Salvar" }: VideoFormProps) => {
+export const VideoForm = ({ video, onChange, onSave, saveLabel = "Salvar", isLoading = false }: VideoFormProps) => {
   return (
     <div className="space-y-3 pt-2">
       {/* Title & Description */}
@@ -143,8 +143,8 @@ export const VideoForm = ({ video, onChange, onSave, saveLabel = "Salvar" }: Vid
       </div>
 
       {/* Save Button */}
-      <Button onClick={onSave} className="w-full bg-primary hover:bg-primary/90 text-primary-foreground h-9">
-        <Save className="w-4 h-4 mr-2" />
+      <Button onClick={onSave} className="w-full bg-primary hover:bg-primary/90 text-primary-foreground h-9" disabled={isLoading}>
+        {isLoading ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Save className="w-4 h-4 mr-2" />}
         {saveLabel}
       </Button>
     </div>

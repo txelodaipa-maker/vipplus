@@ -14,7 +14,96 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      settings: {
+        Row: {
+          created_at: string
+          id: string
+          offer_price: string | null
+          paypal_email: string | null
+          stripe_link: string | null
+          telegram_link: string | null
+          telegram_username: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          offer_price?: string | null
+          paypal_email?: string | null
+          stripe_link?: string | null
+          telegram_link?: string | null
+          telegram_username?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          offer_price?: string | null
+          paypal_email?: string | null
+          stripe_link?: string | null
+          telegram_link?: string | null
+          telegram_username?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      videos: {
+        Row: {
+          added_at: string | null
+          created_at: string
+          description: string | null
+          duration: string | null
+          id: string
+          is_active: boolean | null
+          is_vip: boolean | null
+          payment_link: string | null
+          paypal_enabled: boolean | null
+          price: number | null
+          stripe_enabled: boolean | null
+          thumbnail: string
+          title: string
+          updated_at: string
+          video_url: string | null
+          views: string | null
+        }
+        Insert: {
+          added_at?: string | null
+          created_at?: string
+          description?: string | null
+          duration?: string | null
+          id?: string
+          is_active?: boolean | null
+          is_vip?: boolean | null
+          payment_link?: string | null
+          paypal_enabled?: boolean | null
+          price?: number | null
+          stripe_enabled?: boolean | null
+          thumbnail: string
+          title: string
+          updated_at?: string
+          video_url?: string | null
+          views?: string | null
+        }
+        Update: {
+          added_at?: string | null
+          created_at?: string
+          description?: string | null
+          duration?: string | null
+          id?: string
+          is_active?: boolean | null
+          is_vip?: boolean | null
+          payment_link?: string | null
+          paypal_enabled?: boolean | null
+          price?: number | null
+          stripe_enabled?: boolean | null
+          thumbnail?: string
+          title?: string
+          updated_at?: string
+          video_url?: string | null
+          views?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

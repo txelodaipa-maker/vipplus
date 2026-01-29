@@ -1,17 +1,19 @@
 import { PreviewCard } from "@/components/PreviewCard";
 import { Button } from "@/components/ui/button";
-import { Send, Star, Users, Eye, ArrowRight, Zap, CreditCard, CheckCircle, ArrowDown } from "lucide-react";
-import { useContentStore } from "@/stores/contentStore";
+import { Send, Star, Users, Eye, ArrowRight, Zap, CreditCard, CheckCircle, ArrowDown, Loader2 } from "lucide-react";
+import { useActiveVideos } from "@/hooks/useVideos";
+import { useSettings } from "@/hooks/useSettings";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { AnimatedSection, StaggerContainer, StaggerItem } from "@/components/animations/AnimatedSection";
 import { AnimatedButton, FloatingElement, PulseElement } from "@/components/animations/AnimatedCard";
 
 const Home = () => {
-  const { videos, settings } = useContentStore();
-  const activeVideos = videos.filter((v) => v.isActive);
-  const vipVideos = activeVideos.filter((v) => v.isVip);
-  const previewVideos = activeVideos.filter((v) => !v.isVip);
+  const { data: videos = [], isLoading: videosLoading } = useActiveVideos();
+  const { data: settings } = useSettings();
+  
+  const vipVideos = videos.filter((v) => v.isVip);
+  const previewVideos = videos.filter((v) => !v.isVip);
 
   // Calculate stats from videos
   const minPrice = videos.length > 0 ? Math.min(...videos.map(v => v.price || 25)) : 25;
@@ -22,11 +24,19 @@ const Home = () => {
 
   // Generate Telegram message for special offer
   const generateOfferMessage = () => {
-    const message = `Hi! I'm interested in the ${settings.offerPrice} offer including all content. Could you guide me on how to pay?`;
+    const message = `Hi! I'm interested in the ${settings?.offerPrice || "$100"} offer including all content. Could you guide me on how to pay?`;
     return encodeURIComponent(message);
   };
 
-  const telegramOfferLink = `${settings.telegramLink}?text=${generateOfferMessage()}`;
+  const telegramOfferLink = `${settings?.telegramLink || "https://t.me/videosplus"}?text=${generateOfferMessage()}`;
+
+  if (videosLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background overflow-hidden">
@@ -74,7 +84,7 @@ const Home = () => {
                 transition={{ duration: 0.5, delay: 0.3, ease: "backOut" }}
                 className="inline-block"
               >
-                {settings.offerPrice}
+                {settings?.offerPrice || "$100"}
               </motion.span>
             </motion.h1>
             
@@ -101,11 +111,11 @@ const Home = () => {
                   </Button>
                 </AnimatedButton>
               </a>
-              <a href={settings.stripeLink || "#"} target="_blank" rel="noopener noreferrer">
+              <a href={settings?.stripeLink || "#"} target="_blank" rel="noopener noreferrer">
                 <AnimatedButton>
                   <Button size="lg" className="bg-white text-primary hover:bg-white/90 gap-2 font-semibold">
                     <CreditCard className="w-4 h-4" />
-                    Pay {settings.offerPrice} Now
+                    Pay {settings?.offerPrice || "$100"} Now
                   </Button>
                 </AnimatedButton>
               </a>
@@ -284,7 +294,7 @@ const Home = () => {
             ))}
           </StaggerContainer>
 
-          {activeVideos.length === 0 && (
+          {videos.length === 0 && (
             <AnimatedSection className="text-center py-16">
               <div className="glass-card p-12 max-w-md mx-auto">
                 <Eye className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
@@ -318,7 +328,7 @@ const Home = () => {
                     </Button>
                   </AnimatedButton>
                 </a>
-                <a href={settings.stripeLink || "#"} target="_blank" rel="noopener noreferrer">
+                <a href={settings?.stripeLink || "#"} target="_blank" rel="noopener noreferrer">
                   <AnimatedButton>
                     <Button size="lg" className="btn-pay gap-2">
                       <CreditCard className="w-4 h-4" />
