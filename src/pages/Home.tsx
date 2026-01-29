@@ -13,7 +13,8 @@ const Home = () => {
   const { data: settings } = useSettings();
   
   const vipVideos = videos.filter((v) => v.isVip);
-  const previewVideos = videos.filter((v) => !v.isVip);
+  const exclusiveVideos = videos.filter((v) => v.isExclusive && !v.isVip);
+  const previewVideos = videos.filter((v) => !v.isVip && !v.isExclusive);
 
   // Calculate stats from videos
   const minPrice = videos.length > 0 ? Math.min(...videos.map(v => v.price || 25)) : 25;
@@ -216,32 +217,22 @@ const Home = () => {
         </div>
       </section>
 
-      {/* VIP & Exclusive Section - Top */}
+      {/* VIP Section */}
       {vipVideos.length > 0 && (
-        <section className="py-12 bg-gradient-to-b from-card/80 to-background border-b border-border">
+        <section className="py-12 bg-gradient-to-b from-amber-500/5 to-background border-b border-border">
           <div className="container mx-auto px-4">
             <AnimatedSection>
               <div className="text-center mb-8">
-                <div className="flex items-center justify-center gap-3 mb-3">
-                  <motion.span 
-                    className="px-3 py-1 rounded-full text-xs font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30"
-                    initial={{ scale: 0, x: -20 }}
-                    animate={{ scale: 1, x: 0 }}
-                    transition={{ delay: 0.2, type: "spring" }}
-                  >
-                    🔥 VIP
-                  </motion.span>
-                  <motion.span 
-                    className="px-3 py-1 rounded-full text-xs font-bold bg-primary/20 text-primary border border-primary/30"
-                    initial={{ scale: 0, x: 20 }}
-                    animate={{ scale: 1, x: 0 }}
-                    transition={{ delay: 0.3, type: "spring" }}
-                  >
-                    ⭐ EXCLUSIVE
-                  </motion.span>
-                </div>
-                <h2 className="text-2xl font-bold">Premium Content</h2>
-                <p className="text-muted-foreground text-sm mt-1">Unlock exclusive videos with a single payment</p>
+                <motion.span 
+                  className="px-3 py-1 rounded-full text-xs font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30"
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ delay: 0.2, type: "spring" }}
+                >
+                  🔥 VIP
+                </motion.span>
+                <h2 className="text-2xl font-bold mt-3">VIP Content</h2>
+                <p className="text-muted-foreground text-sm mt-1">Premium videos with exclusive access</p>
               </div>
             </AnimatedSection>
             <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 max-w-6xl mx-auto">
@@ -259,6 +250,47 @@ const Home = () => {
                     duration={video.duration}
                     addedTime={video.addedAt}
                     isVip={true}
+                  />
+                </StaggerItem>
+              ))}
+            </StaggerContainer>
+          </div>
+        </section>
+      )}
+
+      {/* Exclusive Section */}
+      {exclusiveVideos.length > 0 && (
+        <section className="py-12 bg-gradient-to-b from-primary/5 to-background border-b border-border">
+          <div className="container mx-auto px-4">
+            <AnimatedSection>
+              <div className="text-center mb-8">
+                <motion.span 
+                  className="px-3 py-1 rounded-full text-xs font-bold bg-primary/20 text-primary border border-primary/30"
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ delay: 0.2, type: "spring" }}
+                >
+                  ⭐ EXCLUSIVE
+                </motion.span>
+                <h2 className="text-2xl font-bold mt-3">Exclusive Content</h2>
+                <p className="text-muted-foreground text-sm mt-1">Special curated videos for you</p>
+              </div>
+            </AnimatedSection>
+            <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 max-w-6xl mx-auto">
+              {exclusiveVideos.map((video) => (
+                <StaggerItem key={video.id}>
+                  <PreviewCard
+                    id={video.id}
+                    title={video.title}
+                    description={video.description}
+                    thumbnail={video.thumbnail}
+                    videoUrl={video.videoUrl}
+                    paymentLink={video.paymentLink}
+                    price={video.price}
+                    views={video.views}
+                    duration={video.duration}
+                    addedTime={video.addedAt}
+                    isVip={false}
                   />
                 </StaggerItem>
               ))}
