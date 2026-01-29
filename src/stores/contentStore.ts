@@ -92,7 +92,7 @@ const defaultVideos: Video[] = [
 
 export const useContentStore = create<ContentStore>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       videos: defaultVideos,
       settings: {
         telegramLink: "https://t.me/videosplus",
@@ -102,33 +102,60 @@ export const useContentStore = create<ContentStore>()(
         offerPrice: "$100",
       },
       addVideo: (video) =>
-        set((state) => ({
-          videos: [
-            ...state.videos,
-            {
-              ...video,
-              id: Date.now().toString(),
-              createdAt: new Date().toISOString(),
-            },
-          ],
-        })),
+        set((state) => {
+          const newVideo = {
+            ...video,
+            id: Date.now().toString(),
+            createdAt: new Date().toISOString(),
+          };
+          console.log("Adding video:", newVideo);
+          return {
+            videos: [...state.videos, newVideo],
+          };
+        }),
       updateVideo: (id, updates) =>
-        set((state) => ({
-          videos: state.videos.map((v) =>
-            v.id === id ? { ...v, ...updates } : v
-          ),
-        })),
+        set((state) => {
+          console.log("Updating video:", id, updates);
+          return {
+            videos: state.videos.map((v) =>
+              v.id === id ? { ...v, ...updates } : v
+            ),
+          };
+        }),
       deleteVideo: (id) =>
-        set((state) => ({
-          videos: state.videos.filter((v) => v.id !== id),
-        })),
+        set((state) => {
+          console.log("Deleting video:", id);
+          return {
+            videos: state.videos.filter((v) => v.id !== id),
+          };
+        }),
       updateSettings: (newSettings) =>
-        set((state) => ({
-          settings: { ...state.settings, ...newSettings },
-        })),
+        set((state) => {
+          console.log("Updating settings:", newSettings);
+          return {
+            settings: { ...state.settings, ...newSettings },
+          };
+        }),
     }),
     {
       name: "videosplus-content",
+      version: 2, // Increment version to reset corrupted localStorage
+      migrate: (persistedState: any, version) => {
+        // If old version or no videos, use defaults
+        if (version < 2 || !persistedState?.videos?.length) {
+          return {
+            videos: defaultVideos,
+            settings: persistedState?.settings || {
+              telegramLink: "https://t.me/videosplus",
+              telegramUsername: "videosplus",
+              stripeLink: "",
+              paypalEmail: "",
+              offerPrice: "$100",
+            },
+          };
+        }
+        return persistedState as any;
+      },
     }
   )
 );
