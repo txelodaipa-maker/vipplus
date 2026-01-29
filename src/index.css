@@ -97,6 +97,19 @@
 }
 
 @layer components {
+  /* Hide Lovable badge */
+  a[href*="lovable.dev"], 
+  iframe[src*="lovable.dev"],
+  div[style*="Edit with Lovable"],
+  .lovable-badge {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    position: absolute !important;
+    z-index: -9999 !important;
+  }
+
   .glass-card {
     @apply bg-card border border-border rounded-2xl;
     box-shadow: var(--shadow-card);
