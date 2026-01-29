@@ -8,6 +8,10 @@ export interface Video {
   thumbnail: string;
   videoUrl: string;
   paymentLink: string;
+  price: number;
+  views: string;
+  duration: string;
+  addedAt: string;
   isVip: boolean;
   isActive: boolean;
   stripeEnabled: boolean;
@@ -17,6 +21,7 @@ export interface Video {
 
 export interface Settings {
   telegramLink: string;
+  telegramUsername: string;
   stripeLink: string;
   paypalEmail: string;
   offerPrice: string;
@@ -39,6 +44,10 @@ const defaultVideos: Video[] = [
     thumbnail: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&q=80",
     videoUrl: "",
     paymentLink: "",
+    price: 30,
+    views: "2.5K",
+    duration: "1min 30s",
+    addedAt: "2 weeks ago",
     isVip: false,
     isActive: true,
     stripeEnabled: true,
@@ -52,6 +61,10 @@ const defaultVideos: Video[] = [
     thumbnail: "https://images.unsplash.com/photo-1557682250-33bd709cbe85?w=800&q=80",
     videoUrl: "",
     paymentLink: "",
+    price: 60,
+    views: "4.3K",
+    duration: "2min 15s",
+    addedAt: "1 week ago",
     isVip: true,
     isActive: true,
     stripeEnabled: true,
@@ -65,6 +78,10 @@ const defaultVideos: Video[] = [
     thumbnail: "https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=800&q=80",
     videoUrl: "",
     paymentLink: "",
+    price: 45,
+    views: "1.8K",
+    duration: "3min 45s",
+    addedAt: "3 weeks ago",
     isVip: false,
     isActive: true,
     stripeEnabled: true,
@@ -79,6 +96,7 @@ export const useContentStore = create<ContentStore>()(
       videos: defaultVideos,
       settings: {
         telegramLink: "https://t.me/videosplus",
+        telegramUsername: "videosplus",
         stripeLink: "",
         paypalEmail: "",
         offerPrice: "$100",

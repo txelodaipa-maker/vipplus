@@ -7,11 +7,24 @@ import { motion } from "framer-motion";
 import { AnimatedSection, StaggerContainer, StaggerItem } from "@/components/animations/AnimatedSection";
 import { AnimatedButton, FloatingElement, PulseElement } from "@/components/animations/AnimatedCard";
 
-const TELEGRAM_LINK = "https://t.me/videosplus";
-
 const Home = () => {
   const { videos, settings } = useContentStore();
   const previewVideos = videos.filter((v) => v.isActive && !v.isVip);
+
+  // Calculate stats from videos
+  const minPrice = videos.length > 0 ? Math.min(...videos.map(v => v.price || 25)) : 25;
+  const maxPrice = videos.length > 0 ? Math.max(...videos.map(v => v.price || 100)) : 100;
+  const avgPrice = videos.length > 0 
+    ? (videos.reduce((sum, v) => sum + (v.price || 0), 0) / videos.length).toFixed(2) 
+    : "42.67";
+
+  // Generate Telegram message for special offer
+  const generateOfferMessage = () => {
+    const message = `Hi! I'm interested in the ${settings.offerPrice} offer including all content. Could you guide me on how to pay?`;
+    return encodeURIComponent(message);
+  };
+
+  const telegramOfferLink = `${settings.telegramLink}?text=${generateOfferMessage()}`;
 
   return (
     <div className="min-h-screen bg-background overflow-hidden">
@@ -78,7 +91,7 @@ const Home = () => {
               transition={{ duration: 0.5, delay: 0.3 }}
               className="flex flex-wrap justify-center gap-3 pt-4"
             >
-              <a href={TELEGRAM_LINK} target="_blank" rel="noopener noreferrer">
+              <a href={telegramOfferLink} target="_blank" rel="noopener noreferrer">
                 <AnimatedButton>
                   <Button size="lg" variant="outline" className="bg-white/10 border-white/30 text-white hover:bg-white/20 gap-2">
                     <Send className="w-4 h-4" />
@@ -86,12 +99,14 @@ const Home = () => {
                   </Button>
                 </AnimatedButton>
               </a>
-              <AnimatedButton>
-                <Button size="lg" className="bg-white text-primary hover:bg-white/90 gap-2 font-semibold">
-                  <CreditCard className="w-4 h-4" />
-                  Pay {settings.offerPrice} Now
-                </Button>
-              </AnimatedButton>
+              <a href={settings.stripeLink || "#"} target="_blank" rel="noopener noreferrer">
+                <AnimatedButton>
+                  <Button size="lg" className="bg-white text-primary hover:bg-white/90 gap-2 font-semibold">
+                    <CreditCard className="w-4 h-4" />
+                    Pay {settings.offerPrice} Now
+                  </Button>
+                </AnimatedButton>
+              </a>
             </motion.div>
 
             {/* Features */}
@@ -133,7 +148,7 @@ const Home = () => {
             <div className="flex flex-wrap items-center justify-between gap-4">
               <div>
                 <h2 className="text-2xl font-bold">Available Videos</h2>
-                <p className="text-muted-foreground">From $25.00</p>
+                <p className="text-muted-foreground">From ${minPrice.toFixed(2)}</p>
               </div>
               
               <motion.div 
@@ -169,10 +184,10 @@ const Home = () => {
                   <span>65 online</span>
                 </motion.div>
                 <div className="stat-badge">
-                  <span>Up to $100.00</span>
+                  <span>Up to ${maxPrice.toFixed(2)}</span>
                 </div>
                 <div className="stat-badge">
-                  <span>Avg: $42.67</span>
+                  <span>Avg: ${avgPrice}</span>
                 </div>
               </motion.div>
 
@@ -202,10 +217,10 @@ const Home = () => {
                   thumbnail={video.thumbnail}
                   videoUrl={video.videoUrl}
                   paymentLink={video.paymentLink}
-                  price={29.99}
-                  views="2.5K"
-                  duration="2min 30s"
-                  addedTime="1 week ago"
+                  price={video.price}
+                  views={video.views}
+                  duration={video.duration}
+                  addedTime={video.addedAt}
                 />
               </StaggerItem>
             ))}
@@ -232,25 +247,27 @@ const Home = () => {
               whileHover={{ scale: 1.01 }}
               transition={{ duration: 0.3 }}
             >
-              <h2 className="text-2xl font-bold">Get All Content for {settings.offerPrice}</h2>
+              <h2 className="text-2xl font-bold">For more VIP content or all content</h2>
               <p className="text-muted-foreground">
-                Complete collection with instant delivery. One-time payment, lifetime access.
+                Get in touch with us for exclusive access to premium videos and complete content library. Your privacy is our priority.
               </p>
               <div className="flex flex-wrap justify-center gap-3">
-                <a href={TELEGRAM_LINK} target="_blank" rel="noopener noreferrer">
+                <a href={telegramOfferLink} target="_blank" rel="noopener noreferrer">
                   <AnimatedButton>
                     <Button size="lg" className="btn-telegram gap-2">
                       <Send className="w-4 h-4" />
-                      Contact on Telegram
+                      Contact via Telegram
                     </Button>
                   </AnimatedButton>
                 </a>
-                <AnimatedButton>
-                  <Button size="lg" className="btn-pay gap-2">
-                    <CreditCard className="w-4 h-4" />
-                    Pay Instantly
-                  </Button>
-                </AnimatedButton>
+                <a href={settings.stripeLink || "#"} target="_blank" rel="noopener noreferrer">
+                  <AnimatedButton>
+                    <Button size="lg" className="btn-pay gap-2">
+                      <CreditCard className="w-4 h-4" />
+                      Pay Instantly
+                    </Button>
+                  </AnimatedButton>
+                </a>
               </div>
             </motion.div>
           </AnimatedSection>

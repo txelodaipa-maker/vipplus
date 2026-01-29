@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Play, Send, CreditCard, Eye, Clock } from "lucide-react";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useContentStore } from "@/stores/contentStore";
 
 interface PreviewCardProps {
   id: string;
@@ -15,8 +16,6 @@ interface PreviewCardProps {
   duration?: string;
   addedTime?: string;
 }
-
-
 
 export const PreviewCard = ({ 
   id, 
@@ -32,7 +31,26 @@ export const PreviewCard = ({
 }: PreviewCardProps) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
-  const telegramLink = "https://t.me/videosplus";
+  const { settings } = useContentStore();
+
+  // Generate Telegram message with video details
+  const generateTelegramMessage = () => {
+    const message = `🎬 **${title}**
+
+💰 **Price:** $${price.toFixed(2)}
+⏱️ **Duration:** ${duration}
+👀 **Views:** ${views}
+📅 **Added:** ${addedTime}
+
+📝 **Description:**
+${description || title}
+
+Please let me know how to proceed with payment.`;
+    
+    return encodeURIComponent(message);
+  };
+
+  const telegramLink = `${settings.telegramLink}?text=${generateTelegramMessage()}`;
 
   return (
     <motion.div 
@@ -91,7 +109,7 @@ export const PreviewCard = ({
               
               {/* Play overlay on hover */}
               <motion.button
-                onClick={() => setIsPlaying(true)}
+                onClick={() => videoUrl && setIsPlaying(true)}
                 className="absolute inset-0 flex items-center justify-center bg-foreground/0"
                 animate={{ backgroundColor: isHovered ? "rgba(0,0,0,0.2)" : "rgba(0,0,0,0)" }}
                 transition={{ duration: 0.3 }}
@@ -116,9 +134,6 @@ export const PreviewCard = ({
       {/* Content */}
       <div className="p-3 space-y-2">
         <h3 className="font-semibold line-clamp-1 text-sm leading-tight">{title}</h3>
-        {description && (
-          <p className="text-xs text-muted-foreground line-clamp-1">{description}</p>
-        )}
 
         {/* Stats */}
         <div className="flex items-center justify-between text-xs text-muted-foreground">
@@ -129,7 +144,22 @@ export const PreviewCard = ({
           <span>{addedTime}</span>
         </div>
 
-        <div className="grid grid-cols-2 gap-2 pt-1">
+        {/* Action Buttons - 3 columns like reference site */}
+        <div className="grid grid-cols-3 gap-1.5 pt-1">
+          {/* Preview Button */}
+          <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+            <Button 
+              size="sm" 
+              variant="outline"
+              className="gap-1 w-full text-xs h-8"
+              onClick={() => videoUrl && setIsPlaying(true)}
+            >
+              <Play className="w-3 h-3" />
+              Preview
+            </Button>
+          </motion.div>
+
+          {/* Telegram Button */}
           <a href={telegramLink} target="_blank" rel="noopener noreferrer">
             <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} className="h-full">
               <Button size="sm" className="btn-telegram gap-1 w-full text-xs h-8">
@@ -138,6 +168,8 @@ export const PreviewCard = ({
               </Button>
             </motion.div>
           </a>
+
+          {/* Pay Button */}
           <a href={paymentLink || "#"} target="_blank" rel="noopener noreferrer">
             <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
               <Button size="sm" className="btn-pay gap-1 text-xs h-8 w-full">
