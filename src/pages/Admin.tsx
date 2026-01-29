@@ -23,6 +23,7 @@ import { Plus, Trash2, Edit, Settings, Video, Save, Shield, Link, CreditCard, Me
 import { useContentStore, Video as VideoType } from "@/stores/contentStore";
 import { toast } from "sonner";
 import { ThumbnailUpload } from "@/components/admin/ThumbnailUpload";
+import { VideoUpload } from "@/components/admin/VideoUpload";
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -56,7 +57,7 @@ const Admin = () => {
 
   const handleAddVideo = () => {
     if (!newVideo.title || !newVideo.thumbnail) {
-      toast.error("Preencha título e URL da thumbnail");
+      toast.error("Preencha título e faça upload da thumbnail");
       return;
     }
     addVideo(newVideo);
@@ -143,14 +144,10 @@ const Admin = () => {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label className="text-sm">URL do Vídeo (opcional)</Label>
-                  <Input
+                  <Label className="text-sm">Vídeo</Label>
+                  <VideoUpload
                     value={newVideo.videoUrl}
-                    onChange={(e) =>
-                      setNewVideo({ ...newVideo, videoUrl: e.target.value })
-                    }
-                    placeholder="https://..."
-                    className="bg-background/50"
+                    onChange={(url) => setNewVideo({ ...newVideo, videoUrl: url })}
                   />
                 </div>
                 <div className="grid grid-cols-2 gap-4 pt-2">
@@ -295,16 +292,12 @@ const Admin = () => {
                                   />
                                 </div>
                                 <div className="space-y-2">
-                                  <Label className="text-sm">URL do Vídeo</Label>
-                                  <Input
+                                  <Label className="text-sm">Vídeo</Label>
+                                  <VideoUpload
                                     value={editingVideo.videoUrl}
-                                    onChange={(e) =>
-                                      setEditingVideo({
-                                        ...editingVideo,
-                                        videoUrl: e.target.value,
-                                      })
+                                    onChange={(url) =>
+                                      setEditingVideo({ ...editingVideo, videoUrl: url })
                                     }
-                                    className="bg-background/50"
                                   />
                                 </div>
                                 <div className="grid grid-cols-2 gap-3">

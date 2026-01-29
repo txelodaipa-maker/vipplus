@@ -1,15 +1,15 @@
 import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
-import { Upload, X, Loader2, Image } from "lucide-react";
+import { X, Loader2, Video } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
-interface ThumbnailUploadProps {
+interface VideoUploadProps {
   value: string;
   onChange: (url: string) => void;
 }
 
-export const ThumbnailUpload = ({ value, onChange }: ThumbnailUploadProps) => {
+export const VideoUpload = ({ value, onChange }: VideoUploadProps) => {
   const [isUploading, setIsUploading] = useState(false);
   const [preview, setPreview] = useState<string>(value);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -18,13 +18,13 @@ export const ThumbnailUpload = ({ value, onChange }: ThumbnailUploadProps) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    if (!file.type.startsWith("image/")) {
-      toast.error("Apenas imagens são permitidas");
+    if (!file.type.startsWith("video/")) {
+      toast.error("Apenas vídeos são permitidos");
       return;
     }
 
-    if (file.size > 5 * 1024 * 1024) {
-      toast.error("Arquivo muito grande. Máximo 5MB");
+    if (file.size > 100 * 1024 * 1024) {
+      toast.error("Arquivo muito grande. Máximo 100MB");
       return;
     }
 
@@ -35,7 +35,7 @@ export const ThumbnailUpload = ({ value, onChange }: ThumbnailUploadProps) => {
       const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
 
       const { error: uploadError } = await supabase.storage
-        .from("thumbnails")
+        .from("videos")
         .upload(fileName, file, {
           cacheControl: "3600",
           upsert: false,
@@ -44,12 +44,12 @@ export const ThumbnailUpload = ({ value, onChange }: ThumbnailUploadProps) => {
       if (uploadError) throw uploadError;
 
       const { data: urlData } = supabase.storage
-        .from("thumbnails")
+        .from("videos")
         .getPublicUrl(fileName);
 
       setPreview(urlData.publicUrl);
       onChange(urlData.publicUrl);
-      toast.success("Imagem enviada!");
+      toast.success("Vídeo enviado!");
     } catch (error: any) {
       console.error("Upload error:", error);
       toast.error("Erro ao enviar: " + error.message);
@@ -69,18 +69,20 @@ export const ThumbnailUpload = ({ value, onChange }: ThumbnailUploadProps) => {
       <input
         ref={fileInputRef}
         type="file"
-        accept="image/*"
+        accept="video/*"
         onChange={handleFileSelect}
         className="hidden"
       />
 
       {preview ? (
         <div className="relative group">
-          <img
+          <video
             src={preview}
-            alt="Thumbnail"
             className="w-full h-28 object-cover rounded-lg border border-border"
           />
+          <div className="absolute inset-0 bg-black/50 rounded-lg flex items-center justify-center">
+            <Video className="w-8 h-8 text-white" />
+          </div>
           <Button
             type="button"
             variant="ghost"
@@ -100,8 +102,8 @@ export const ThumbnailUpload = ({ value, onChange }: ThumbnailUploadProps) => {
             <Loader2 className="w-6 h-6 text-muted-foreground animate-spin" />
           ) : (
             <>
-              <Image className="w-6 h-6 text-muted-foreground" />
-              <span className="text-xs text-muted-foreground">Upload Thumbnail</span>
+              <Video className="w-6 h-6 text-muted-foreground" />
+              <span className="text-xs text-muted-foreground">Upload Vídeo</span>
             </>
           )}
         </div>
