@@ -41,21 +41,23 @@ const Admin = () => {
     useContentStore();
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [editingVideo, setEditingVideo] = useState<VideoType | null>(null);
-  const [newVideo, setNewVideo] = useState<Partial<VideoType>>({
+  const getDefaultVideo = (): Partial<VideoType> => ({
     title: "",
     description: "",
     thumbnail: "",
     videoUrl: "",
     paymentLink: "",
     price: 30,
-    views: "1.0K",
-    duration: "1min 00s",
+    views: "0",
+    duration: "0:00",
     addedAt: "Just now",
     isVip: false,
     isActive: true,
     stripeEnabled: true,
     paypalEnabled: true,
   });
+  
+  const [newVideo, setNewVideo] = useState<Partial<VideoType>>(getDefaultVideo());
 
   const [localSettings, setLocalSettings] = useState(settings);
 
@@ -79,21 +81,7 @@ const Admin = () => {
       stripeEnabled: newVideo.stripeEnabled ?? true,
       paypalEnabled: newVideo.paypalEnabled ?? true,
     });
-    setNewVideo({
-      title: "",
-      description: "",
-      thumbnail: "",
-      videoUrl: "",
-      paymentLink: "",
-      price: 30,
-      views: "1.0K",
-      duration: "1min 00s",
-      addedAt: "Just now",
-      isVip: false,
-      isActive: true,
-      stripeEnabled: true,
-      paypalEnabled: true,
-    });
+    setNewVideo(getDefaultVideo());
     setIsAddOpen(false);
     toast.success("Vídeo adicionado com sucesso!");
   };
