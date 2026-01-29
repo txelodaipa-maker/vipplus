@@ -206,24 +206,35 @@ const Home = () => {
         </div>
       </section>
 
-      {/* VIP Videos - Top Section */}
+      {/* VIP & Exclusive Section - Top */}
       {vipVideos.length > 0 && (
-        <section className="py-12 bg-card/50 border-b border-border">
+        <section className="py-12 bg-gradient-to-b from-card/80 to-background border-b border-border">
           <div className="container mx-auto px-4">
             <AnimatedSection>
-              <div className="flex items-center gap-3 mb-6">
-                <h2 className="text-xl font-bold">🔥 VIP Exclusive</h2>
-                <motion.span 
-                  className="price-badge text-xs"
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  transition={{ delay: 0.3, type: "spring" }}
-                >
-                  PREMIUM
-                </motion.span>
+              <div className="text-center mb-8">
+                <div className="flex items-center justify-center gap-3 mb-3">
+                  <motion.span 
+                    className="px-3 py-1 rounded-full text-xs font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30"
+                    initial={{ scale: 0, x: -20 }}
+                    animate={{ scale: 1, x: 0 }}
+                    transition={{ delay: 0.2, type: "spring" }}
+                  >
+                    🔥 VIP
+                  </motion.span>
+                  <motion.span 
+                    className="px-3 py-1 rounded-full text-xs font-bold bg-primary/20 text-primary border border-primary/30"
+                    initial={{ scale: 0, x: 20 }}
+                    animate={{ scale: 1, x: 0 }}
+                    transition={{ delay: 0.3, type: "spring" }}
+                  >
+                    ⭐ EXCLUSIVE
+                  </motion.span>
+                </div>
+                <h2 className="text-2xl font-bold">Premium Content</h2>
+                <p className="text-muted-foreground text-sm mt-1">Unlock exclusive videos with a single payment</p>
               </div>
             </AnimatedSection>
-            <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 max-w-6xl mx-auto">
               {vipVideos.map((video) => (
                 <StaggerItem key={video.id}>
                   <PreviewCard
