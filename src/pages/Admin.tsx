@@ -121,64 +121,68 @@ const Admin = () => {
                 Novo Vídeo
               </Button>
             </DialogTrigger>
-            <DialogContent className="bg-card border-border">
+            <DialogContent className="bg-card border-border max-w-md max-h-[85vh] overflow-y-auto">
               <DialogHeader>
-                <DialogTitle className="flex items-center gap-2">
-                  <Video className="w-5 h-5 text-primary" />
+                <DialogTitle className="flex items-center gap-2 text-base">
+                  <Video className="w-4 h-4 text-primary" />
                   Adicionar Vídeo
                 </DialogTitle>
               </DialogHeader>
-              <div className="space-y-4 pt-4">
-                <div className="space-y-2">
-                  <Label className="text-sm">Título</Label>
-                  <Input
-                    value={newVideo.title}
-                    onChange={(e) =>
-                      setNewVideo({ ...newVideo, title: e.target.value })
-                    }
-                    placeholder="Ex: Premium Collection Vol. 1"
-                    className="bg-background/50"
-                  />
+              <div className="space-y-3 pt-2">
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="space-y-1">
+                    <Label className="text-xs">Título</Label>
+                    <Input
+                      value={newVideo.title}
+                      onChange={(e) =>
+                        setNewVideo({ ...newVideo, title: e.target.value })
+                      }
+                      placeholder="Título do vídeo"
+                      className="bg-background/50 h-8 text-sm"
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <Label className="text-xs">Descrição</Label>
+                    <Input
+                      value={newVideo.description}
+                      onChange={(e) =>
+                        setNewVideo({ ...newVideo, description: e.target.value })
+                      }
+                      placeholder="Descrição curta"
+                      className="bg-background/50 h-8 text-sm"
+                    />
+                  </div>
                 </div>
-                <div className="space-y-2">
-                  <Label className="text-sm">Descrição</Label>
-                  <Input
-                    value={newVideo.description}
-                    onChange={(e) =>
-                      setNewVideo({ ...newVideo, description: e.target.value })
-                    }
-                    placeholder="Descrição do conteúdo..."
-                    className="bg-background/50"
-                  />
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="space-y-1">
+                    <Label className="text-xs">Thumbnail</Label>
+                    <ThumbnailUpload
+                      value={newVideo.thumbnail}
+                      onChange={(url) => setNewVideo({ ...newVideo, thumbnail: url })}
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <Label className="text-xs">Vídeo</Label>
+                    <VideoUpload
+                      value={newVideo.videoUrl}
+                      onChange={(url) => setNewVideo({ ...newVideo, videoUrl: url })}
+                    />
+                  </div>
                 </div>
-                <div className="space-y-2">
-                  <Label className="text-sm">Thumbnail</Label>
-                  <ThumbnailUpload
-                    value={newVideo.thumbnail}
-                    onChange={(url) => setNewVideo({ ...newVideo, thumbnail: url })}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label className="text-sm">Vídeo</Label>
-                  <VideoUpload
-                    value={newVideo.videoUrl}
-                    onChange={(url) => setNewVideo({ ...newVideo, videoUrl: url })}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label className="text-sm">Link de Pagamento</Label>
+                <div className="space-y-1">
+                  <Label className="text-xs">Link de Pagamento</Label>
                   <Input
                     value={newVideo.paymentLink}
                     onChange={(e) =>
                       setNewVideo({ ...newVideo, paymentLink: e.target.value })
                     }
                     placeholder="https://buy.stripe.com/..."
-                    className="bg-background/50"
+                    className="bg-background/50 h-8 text-sm"
                   />
                 </div>
-                <div className="grid grid-cols-2 gap-4 pt-2">
-                  <div className="flex items-center justify-between p-3 rounded-lg bg-background/50">
-                    <Label className="text-sm">VIP Only</Label>
+                <div className="grid grid-cols-3 gap-2">
+                  <div className="flex items-center justify-between p-2 rounded-lg bg-background/50">
+                    <Label className="text-xs">VIP</Label>
                     <Switch
                       checked={newVideo.isVip}
                       onCheckedChange={(checked) =>
@@ -186,8 +190,8 @@ const Admin = () => {
                       }
                     />
                   </div>
-                  <div className="flex items-center justify-between p-3 rounded-lg bg-background/50">
-                    <Label className="text-sm">Stripe</Label>
+                  <div className="flex items-center justify-between p-2 rounded-lg bg-background/50">
+                    <Label className="text-xs">Stripe</Label>
                     <Switch
                       checked={newVideo.stripeEnabled}
                       onCheckedChange={(checked) =>
@@ -195,19 +199,19 @@ const Admin = () => {
                       }
                     />
                   </div>
+                  <div className="flex items-center justify-between p-2 rounded-lg bg-background/50">
+                    <Label className="text-xs">PayPal</Label>
+                    <Switch
+                      checked={newVideo.paypalEnabled}
+                      onCheckedChange={(checked) =>
+                        setNewVideo({ ...newVideo, paypalEnabled: checked })
+                      }
+                    />
+                  </div>
                 </div>
-                <div className="flex items-center justify-between p-3 rounded-lg bg-background/50">
-                  <Label className="text-sm">PayPal</Label>
-                  <Switch
-                    checked={newVideo.paypalEnabled}
-                    onCheckedChange={(checked) =>
-                      setNewVideo({ ...newVideo, paypalEnabled: checked })
-                    }
-                  />
-                </div>
-                <Button onClick={handleAddVideo} className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">
-                  <Plus className="w-4 h-4 mr-2" />
-                  Adicionar Vídeo
+                <Button onClick={handleAddVideo} className="w-full bg-primary hover:bg-primary/90 text-primary-foreground h-9">
+                  <Save className="w-4 h-4 mr-2" />
+                  Salvar Vídeo
                 </Button>
               </div>
             </DialogContent>
@@ -286,61 +290,65 @@ const Admin = () => {
                               <Edit className="w-4 h-4" />
                             </Button>
                           </DialogTrigger>
-                          <DialogContent className="bg-card border-border">
+                          <DialogContent className="bg-card border-border max-w-md max-h-[85vh] overflow-y-auto">
                             <DialogHeader>
-                              <DialogTitle className="flex items-center gap-2">
-                                <Edit className="w-5 h-5 text-primary" />
+                              <DialogTitle className="flex items-center gap-2 text-base">
+                                <Edit className="w-4 h-4 text-primary" />
                                 Editar Vídeo
                               </DialogTitle>
                             </DialogHeader>
                             {editingVideo && (
-                              <div className="space-y-4 pt-4">
-                                <div className="space-y-2">
-                                  <Label className="text-sm">Título</Label>
-                                  <Input
-                                    value={editingVideo.title}
-                                    onChange={(e) =>
-                                      setEditingVideo({
-                                        ...editingVideo,
-                                        title: e.target.value,
-                                      })
-                                    }
-                                    className="bg-background/50"
-                                  />
+                              <div className="space-y-3 pt-2">
+                                <div className="grid grid-cols-2 gap-3">
+                                  <div className="space-y-1">
+                                    <Label className="text-xs">Título</Label>
+                                    <Input
+                                      value={editingVideo.title}
+                                      onChange={(e) =>
+                                        setEditingVideo({
+                                          ...editingVideo,
+                                          title: e.target.value,
+                                        })
+                                      }
+                                      className="bg-background/50 h-8 text-sm"
+                                    />
+                                  </div>
+                                  <div className="space-y-1">
+                                    <Label className="text-xs">Descrição</Label>
+                                    <Input
+                                      value={editingVideo.description}
+                                      onChange={(e) =>
+                                        setEditingVideo({
+                                          ...editingVideo,
+                                          description: e.target.value,
+                                        })
+                                      }
+                                      className="bg-background/50 h-8 text-sm"
+                                    />
+                                  </div>
                                 </div>
-                                <div className="space-y-2">
-                                  <Label className="text-sm">Descrição</Label>
-                                  <Input
-                                    value={editingVideo.description}
-                                    onChange={(e) =>
-                                      setEditingVideo({
-                                        ...editingVideo,
-                                        description: e.target.value,
-                                      })
-                                    }
-                                    className="bg-background/50"
-                                  />
+                                <div className="grid grid-cols-2 gap-3">
+                                  <div className="space-y-1">
+                                    <Label className="text-xs">Thumbnail</Label>
+                                    <ThumbnailUpload
+                                      value={editingVideo.thumbnail}
+                                      onChange={(url) =>
+                                        setEditingVideo({ ...editingVideo, thumbnail: url })
+                                      }
+                                    />
+                                  </div>
+                                  <div className="space-y-1">
+                                    <Label className="text-xs">Vídeo</Label>
+                                    <VideoUpload
+                                      value={editingVideo.videoUrl}
+                                      onChange={(url) =>
+                                        setEditingVideo({ ...editingVideo, videoUrl: url })
+                                      }
+                                    />
+                                  </div>
                                 </div>
-                                <div className="space-y-2">
-                                  <Label className="text-sm">Thumbnail</Label>
-                                  <ThumbnailUpload
-                                    value={editingVideo.thumbnail}
-                                    onChange={(url) =>
-                                      setEditingVideo({ ...editingVideo, thumbnail: url })
-                                    }
-                                  />
-                                </div>
-                                <div className="space-y-2">
-                                  <Label className="text-sm">Vídeo</Label>
-                                  <VideoUpload
-                                    value={editingVideo.videoUrl}
-                                    onChange={(url) =>
-                                      setEditingVideo({ ...editingVideo, videoUrl: url })
-                                    }
-                                  />
-                                </div>
-                                <div className="space-y-2">
-                                  <Label className="text-sm">Link de Pagamento</Label>
+                                <div className="space-y-1">
+                                  <Label className="text-xs">Link de Pagamento</Label>
                                   <Input
                                     value={editingVideo.paymentLink}
                                     onChange={(e) =>
@@ -350,12 +358,12 @@ const Admin = () => {
                                       })
                                     }
                                     placeholder="https://buy.stripe.com/..."
-                                    className="bg-background/50"
+                                    className="bg-background/50 h-8 text-sm"
                                   />
                                 </div>
-                                <div className="grid grid-cols-2 gap-3">
-                                  <div className="flex items-center justify-between p-3 rounded-lg bg-background/50">
-                                    <Label className="text-sm">Ativo</Label>
+                                <div className="grid grid-cols-4 gap-2">
+                                  <div className="flex items-center justify-between p-2 rounded-lg bg-background/50">
+                                    <Label className="text-xs">Ativo</Label>
                                     <Switch
                                       checked={editingVideo.isActive}
                                       onCheckedChange={(checked) =>
@@ -366,8 +374,8 @@ const Admin = () => {
                                       }
                                     />
                                   </div>
-                                  <div className="flex items-center justify-between p-3 rounded-lg bg-background/50">
-                                    <Label className="text-sm">VIP</Label>
+                                  <div className="flex items-center justify-between p-2 rounded-lg bg-background/50">
+                                    <Label className="text-xs">VIP</Label>
                                     <Switch
                                       checked={editingVideo.isVip}
                                       onCheckedChange={(checked) =>
@@ -378,8 +386,8 @@ const Admin = () => {
                                       }
                                     />
                                   </div>
-                                  <div className="flex items-center justify-between p-3 rounded-lg bg-background/50">
-                                    <Label className="text-sm">Stripe</Label>
+                                  <div className="flex items-center justify-between p-2 rounded-lg bg-background/50">
+                                    <Label className="text-xs">Stripe</Label>
                                     <Switch
                                       checked={editingVideo.stripeEnabled}
                                       onCheckedChange={(checked) =>
@@ -390,8 +398,8 @@ const Admin = () => {
                                       }
                                     />
                                   </div>
-                                  <div className="flex items-center justify-between p-3 rounded-lg bg-background/50">
-                                    <Label className="text-sm">PayPal</Label>
+                                  <div className="flex items-center justify-between p-2 rounded-lg bg-background/50">
+                                    <Label className="text-xs">PayPal</Label>
                                     <Switch
                                       checked={editingVideo.paypalEnabled}
                                       onCheckedChange={(checked) =>
@@ -405,7 +413,7 @@ const Admin = () => {
                                 </div>
                                 <Button
                                   onClick={handleUpdateVideo}
-                                  className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
+                                  className="w-full bg-primary hover:bg-primary/90 text-primary-foreground h-9"
                                 >
                                   <Save className="w-4 h-4 mr-2" />
                                   Salvar Alterações

@@ -76,8 +76,10 @@ const Videos = () => {
                   <PreviewCard
                     id={video.id}
                     title={video.title}
+                    description={video.description}
                     thumbnail={video.thumbnail}
                     videoUrl={video.videoUrl}
+                    paymentLink={video.paymentLink}
                     price={29.99}
                     views="2.5K"
                     duration="2min 30s"
