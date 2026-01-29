@@ -37,11 +37,14 @@
     --radius: 0.75rem;
 
     /* Custom tokens */
-    --gradient-primary: linear-gradient(135deg, hsl(0 72% 51%), hsl(0 72% 40%));
-    --gradient-premium: linear-gradient(135deg, hsl(45 100% 50%), hsl(35 100% 45%));
+    --gradient-primary: linear-gradient(135deg, hsl(0 72% 51%), hsl(0 72% 35%));
+    --gradient-premium: linear-gradient(135deg, hsl(45 100% 55%), hsl(30 100% 50%));
     --gradient-dark: linear-gradient(180deg, hsl(0 0% 7%), hsl(0 0% 4%));
-    --shadow-glow: 0 0 30px hsl(0 72% 51% / 0.3);
-    --shadow-card: 0 4px 24px hsl(0 0% 0% / 0.4);
+    --gradient-hero: radial-gradient(ellipse 80% 50% at 50% -20%, hsl(0 72% 51% / 0.15), transparent);
+    --shadow-glow: 0 0 40px hsl(0 72% 51% / 0.4);
+    --shadow-glow-lg: 0 0 60px hsl(0 72% 51% / 0.5);
+    --shadow-card: 0 8px 32px hsl(0 0% 0% / 0.5);
+    --shadow-card-hover: 0 16px 48px hsl(0 0% 0% / 0.6);
 
     --telegram: 200 100% 50%;
     --telegram-foreground: 0 0% 100%;
@@ -49,8 +52,8 @@
     --success: 142 76% 36%;
     --success-foreground: 0 0% 100%;
 
-    --warning: 45 100% 50%;
-    --warning-foreground: 0 0% 10%;
+    --warning: 45 100% 55%;
+    --warning-foreground: 0 0% 5%;
   }
 }
 
@@ -71,12 +74,21 @@
 
 @layer components {
   .glass-card {
-    @apply bg-card/80 backdrop-blur-xl border border-border/50 rounded-xl;
+    @apply bg-card/90 backdrop-blur-2xl border border-border/40 rounded-2xl;
     box-shadow: var(--shadow-card);
+  }
+
+  .glass-card-premium {
+    @apply bg-card/90 backdrop-blur-2xl border border-warning/20 rounded-2xl;
+    box-shadow: var(--shadow-card), 0 0 40px hsl(45 100% 50% / 0.1);
   }
 
   .glow-primary {
     box-shadow: var(--shadow-glow);
+  }
+
+  .glow-primary-lg {
+    box-shadow: var(--shadow-glow-lg);
   }
 
   .gradient-primary {
@@ -87,46 +99,95 @@
     background: var(--gradient-premium);
   }
 
+  .gradient-hero {
+    background: var(--gradient-hero);
+  }
+
   .text-gradient {
-    @apply bg-clip-text text-transparent;
+    @apply bg-clip-text text-transparent font-bold;
     background: var(--gradient-primary);
   }
 
   .text-gradient-premium {
-    @apply bg-clip-text text-transparent;
+    @apply bg-clip-text text-transparent font-bold;
     background: var(--gradient-premium);
   }
 
   .hover-lift {
-    @apply transition-all duration-300;
+    @apply transition-all duration-500 ease-out;
   }
 
   .hover-lift:hover {
-    @apply -translate-y-1;
-    box-shadow: var(--shadow-glow);
+    @apply -translate-y-2;
+    box-shadow: var(--shadow-card-hover), var(--shadow-glow);
   }
 
   .btn-telegram {
-    @apply bg-[hsl(var(--telegram))] text-[hsl(var(--telegram-foreground))] hover:bg-[hsl(200_100%_45%)];
+    @apply bg-[hsl(var(--telegram))] text-[hsl(var(--telegram-foreground))] hover:bg-[hsl(200_100%_42%)] transition-all duration-300;
+    box-shadow: 0 4px 20px hsl(200 100% 50% / 0.3);
+  }
+
+  .btn-telegram:hover {
+    box-shadow: 0 6px 30px hsl(200 100% 50% / 0.4);
+    transform: translateY(-2px);
+  }
+
+  .btn-premium {
+    @apply font-semibold transition-all duration-300;
+    background: var(--gradient-primary);
+    box-shadow: 0 4px 20px hsl(0 72% 51% / 0.4);
+  }
+
+  .btn-premium:hover {
+    box-shadow: 0 8px 35px hsl(0 72% 51% / 0.5);
+    transform: translateY(-2px);
   }
 
   .animate-pulse-glow {
-    animation: pulse-glow 2s ease-in-out infinite;
+    animation: pulse-glow 2.5s ease-in-out infinite;
   }
 
   @keyframes pulse-glow {
     0%, 100% {
-      box-shadow: 0 0 20px hsl(0 72% 51% / 0.4);
+      box-shadow: 0 0 25px hsl(0 72% 51% / 0.5);
     }
     50% {
-      box-shadow: 0 0 40px hsl(0 72% 51% / 0.6);
+      box-shadow: 0 0 50px hsl(0 72% 51% / 0.7);
     }
+  }
+
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+
+  .animate-float {
+    animation: float 4s ease-in-out infinite;
+  }
+
+  @keyframes shimmer {
+    0% {
+      background-position: -200% 0;
+    }
+    100% {
+      background-position: 200% 0;
+    }
+  }
+
+  .animate-shimmer {
+    background: linear-gradient(90deg, transparent, hsl(0 0% 100% / 0.1), transparent);
+    background-size: 200% 100%;
+    animation: shimmer 2s linear infinite;
   }
 
   @keyframes fade-in {
     from {
       opacity: 0;
-      transform: translateY(10px);
+      transform: translateY(20px);
     }
     to {
       opacity: 1;
@@ -135,6 +196,26 @@
   }
 
   .animate-fade-in {
-    animation: fade-in 0.5s ease-out forwards;
+    animation: fade-in 0.6s ease-out forwards;
+  }
+
+  .animate-fade-in-delay-1 {
+    animation: fade-in 0.6s ease-out 0.1s forwards;
+    opacity: 0;
+  }
+
+  .animate-fade-in-delay-2 {
+    animation: fade-in 0.6s ease-out 0.2s forwards;
+    opacity: 0;
+  }
+
+  .animate-fade-in-delay-3 {
+    animation: fade-in 0.6s ease-out 0.3s forwards;
+    opacity: 0;
+  }
+
+  .section-divider {
+    @apply border-t border-border/30;
+    background: linear-gradient(90deg, transparent, hsl(var(--border) / 0.5), transparent);
   }
 }
