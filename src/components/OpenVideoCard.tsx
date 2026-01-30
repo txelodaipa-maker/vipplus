@@ -1,12 +1,11 @@
 import { useRef, useEffect, useState } from "react";
-import { Eye, Clock, Play } from "lucide-react";
+import { Eye, Clock, Play, Volume2, VolumeX } from "lucide-react";
 import { motion } from "framer-motion";
 
 interface OpenVideoCardProps {
   id: string;
   title: string;
-  thumbnail: string;
-  videoUrl?: string;
+  videoUrl: string;
   views?: string;
   duration?: string;
 }
@@ -14,7 +13,6 @@ interface OpenVideoCardProps {
 export const OpenVideoCard = ({
   id,
   title,
-  thumbnail,
   videoUrl,
   views = "0",
   duration = "0:00",
@@ -23,6 +21,7 @@ export const OpenVideoCard = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isMuted, setIsMuted] = useState(true);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -67,6 +66,14 @@ export const OpenVideoCard = ({
     }
   };
 
+  const toggleMute = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (videoRef.current) {
+      videoRef.current.muted = !videoRef.current.muted;
+      setIsMuted(!isMuted);
+    }
+  };
+
   return (
     <motion.div
       ref={containerRef}
@@ -75,38 +82,28 @@ export const OpenVideoCard = ({
       transition={{ duration: 0.3 }}
       onClick={handleVideoClick}
     >
-      <div className="relative aspect-video bg-muted overflow-hidden">
-        {videoUrl ? (
-          <>
-            <video
-              ref={videoRef}
-              src={videoUrl}
-              poster={thumbnail}
-              className="w-full h-full object-cover"
-              muted
-              loop
-              playsInline
-              preload="metadata"
-            />
-            {!isPlaying && (
-              <motion.div 
-                className="absolute inset-0 flex items-center justify-center bg-black/30"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-              >
-                <div className="w-14 h-14 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
-                  <Play className="w-6 h-6 text-white fill-white" />
-                </div>
-              </motion.div>
-            )}
-          </>
-        ) : (
-          <img
-            src={thumbnail}
-            alt={title}
-            className="w-full h-full object-cover"
-          />
+      <div className="relative aspect-video bg-black overflow-hidden">
+        <video
+          ref={videoRef}
+          src={videoUrl}
+          className="w-full h-full object-cover"
+          muted={isMuted}
+          loop
+          playsInline
+          preload="metadata"
+        />
+        
+        {!isPlaying && (
+          <motion.div 
+            className="absolute inset-0 flex items-center justify-center bg-black/40"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <div className="w-14 h-14 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
+              <Play className="w-6 h-6 text-white fill-white" />
+            </div>
+          </motion.div>
         )}
         
         {/* Duration badge */}
@@ -118,6 +115,18 @@ export const OpenVideoCard = ({
         <div className="absolute top-2 left-2 px-2 py-0.5 rounded bg-success/90 text-white text-xs font-bold">
           OPEN
         </div>
+
+        {/* Mute toggle */}
+        <button
+          onClick={toggleMute}
+          className="absolute bottom-2 left-2 p-1.5 rounded bg-black/70 text-white hover:bg-black/90 transition-colors"
+        >
+          {isMuted ? (
+            <VolumeX className="w-4 h-4" />
+          ) : (
+            <Volume2 className="w-4 h-4" />
+          )}
+        </button>
       </div>
 
       <div className="p-3 space-y-2">
