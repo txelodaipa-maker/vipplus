@@ -37,14 +37,14 @@ export const PreviewCard = ({
 
   // Generate Telegram message with video details
   const generateTelegramMessage = () => {
-    const message = `🎬 **${title}**
+    const message = `🎬 ${title}
 
-💰 **Price:** $${price.toFixed(2)}
-⏱️ **Duration:** ${duration}
-👀 **Views:** ${views}
-📅 **Added:** ${addedTime}
+💰 Price: $${price.toFixed(2)}
+⏱️ Duration: ${duration}
+👀 Views: ${views}
+📅 Added: ${addedTime}
 
-📝 **Description:**
+📝 Description:
 ${description || title}
 
 Please let me know how to proceed with payment.`;
@@ -52,7 +52,15 @@ Please let me know how to proceed with payment.`;
     return encodeURIComponent(message);
   };
 
-  const telegramLink = `${settings?.telegramLink || "https://t.me/videosplus"}?text=${generateTelegramMessage()}`;
+  // Get base telegram username from settings
+  const getTelegramUsername = () => {
+    const link = settings?.telegramLink || "https://t.me/videosplus";
+    // Extract username from link like "https://t.me/username"
+    const match = link.match(/t\.me\/([^/?]+)/);
+    return match ? match[1] : "videosplus";
+  };
+
+  const telegramLink = `https://t.me/${getTelegramUsername()}?text=${generateTelegramMessage()}`;
 
   return (
     <motion.div 
