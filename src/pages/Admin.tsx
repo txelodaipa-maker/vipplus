@@ -59,6 +59,7 @@ const Admin = () => {
     addedAt: "Just now",
     isVip: false,
     isExclusive: false,
+    isOpen: false,
     isActive: true,
     stripeEnabled: true,
     paypalEnabled: true,
@@ -96,6 +97,7 @@ const Admin = () => {
       addedAt: newVideo.addedAt || "Just now",
       isVip: newVideo.isVip ?? false,
       isExclusive: newVideo.isExclusive ?? false,
+      isOpen: newVideo.isOpen ?? false,
       isActive: newVideo.isActive ?? true,
       stripeEnabled: newVideo.stripeEnabled ?? true,
       paypalEnabled: newVideo.paypalEnabled ?? true,
@@ -208,7 +210,7 @@ const Admin = () => {
                         <span className="text-muted-foreground">{video.views || "0"}</span>
                       </TableCell>
                       <TableCell>
-                        <div className="flex gap-1">
+                        <div className="flex gap-1 flex-wrap">
                           {video.isVip && (
                             <span className="text-xs px-2 py-0.5 rounded-full font-medium bg-amber-500/20 text-amber-400">
                               VIP
@@ -219,7 +221,12 @@ const Admin = () => {
                               Exclusive
                             </span>
                           )}
-                          {!video.isVip && !video.isExclusive && (
+                          {video.isOpen && (
+                            <span className="text-xs px-2 py-0.5 rounded-full font-medium bg-success/20 text-success">
+                              Open
+                            </span>
+                          )}
+                          {!video.isVip && !video.isExclusive && !video.isOpen && (
                             <span className="text-xs px-2 py-0.5 rounded-full font-medium bg-muted text-muted-foreground">
                               Preview
                             </span>

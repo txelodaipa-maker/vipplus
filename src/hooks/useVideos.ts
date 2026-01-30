@@ -15,6 +15,7 @@ export interface Video {
   addedAt: string;
   isVip: boolean;
   isExclusive: boolean;
+  isOpen: boolean;
   isActive: boolean;
   stripeEnabled: boolean;
   paypalEnabled: boolean;
@@ -34,6 +35,7 @@ interface DbVideo {
   added_at: string | null;
   is_vip: boolean | null;
   is_exclusive: boolean | null;
+  is_open: boolean | null;
   is_active: boolean | null;
   stripe_enabled: boolean | null;
   paypal_enabled: boolean | null;
@@ -53,6 +55,7 @@ const mapDbToVideo = (db: DbVideo): Video => ({
   addedAt: db.added_at || "Just now",
   isVip: db.is_vip ?? false,
   isExclusive: db.is_exclusive ?? false,
+  isOpen: db.is_open ?? false,
   isActive: db.is_active ?? true,
   stripeEnabled: db.stripe_enabled ?? true,
   paypalEnabled: db.paypal_enabled ?? true,
@@ -71,6 +74,7 @@ const mapVideoToDb = (video: Partial<Video>) => ({
   added_at: video.addedAt,
   is_vip: video.isVip,
   is_exclusive: video.isExclusive,
+  is_open: video.isOpen,
   is_active: video.isActive,
   stripe_enabled: video.stripeEnabled,
   paypal_enabled: video.paypalEnabled,

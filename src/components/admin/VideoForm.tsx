@@ -97,7 +97,7 @@ export const VideoForm = ({ video, onChange, onSave, saveLabel = "Salvar", isLoa
       </div>
 
       {/* Toggles */}
-      <div className="grid grid-cols-5 gap-2">
+      <div className="grid grid-cols-3 gap-2">
         <div className="flex items-center justify-between p-2 rounded-lg bg-background/50">
           <Label className="text-xs">Ativo</Label>
           <Switch
@@ -117,6 +117,13 @@ export const VideoForm = ({ video, onChange, onSave, saveLabel = "Salvar", isLoa
           <Switch
             checked={video.isExclusive ?? false}
             onCheckedChange={(checked) => onChange({ isExclusive: checked })}
+          />
+        </div>
+        <div className="flex items-center justify-between p-2 rounded-lg bg-success/10 border border-success/30">
+          <Label className="text-xs text-success">Open</Label>
+          <Switch
+            checked={video.isOpen ?? false}
+            onCheckedChange={(checked) => onChange({ isOpen: checked })}
           />
         </div>
         <div className="flex items-center justify-between p-2 rounded-lg bg-background/50">
