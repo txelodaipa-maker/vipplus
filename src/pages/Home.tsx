@@ -1,6 +1,7 @@
 import { PreviewCard } from "@/components/PreviewCard";
+import { OpenVideoCard } from "@/components/OpenVideoCard";
 import { Button } from "@/components/ui/button";
-import { Send, Star, Users, Eye, ArrowRight, Zap, CreditCard, CheckCircle, ArrowDown, Loader2 } from "lucide-react";
+import { Send, Star, Users, Eye, ArrowRight, Zap, CreditCard, CheckCircle, ArrowDown, Loader2, Play } from "lucide-react";
 import { useActiveVideos } from "@/hooks/useVideos";
 import { useSettings } from "@/hooks/useSettings";
 import { Link } from "react-router-dom";
@@ -14,7 +15,8 @@ const Home = () => {
   
   const vipVideos = videos.filter((v) => v.isVip);
   const exclusiveVideos = videos.filter((v) => v.isExclusive && !v.isVip);
-  const previewVideos = videos.filter((v) => !v.isVip && !v.isExclusive);
+  const openVideos = videos.filter((v) => v.isOpen && !v.isVip && !v.isExclusive);
+  const previewVideos = videos.filter((v) => !v.isVip && !v.isExclusive && !v.isOpen);
 
   // Calculate stats from videos
   const minPrice = videos.length > 0 ? Math.min(...videos.map(v => v.price || 25)) : 25;
@@ -291,6 +293,43 @@ const Home = () => {
                     duration={video.duration}
                     addedTime={video.addedAt}
                     isVip={false}
+                  />
+                </StaggerItem>
+              ))}
+            </StaggerContainer>
+          </div>
+        </section>
+      )}
+
+      {/* Open Videos Section - Autoplay on scroll */}
+      {openVideos.length > 0 && (
+        <section className="py-12 bg-gradient-to-b from-success/5 to-background border-b border-border">
+          <div className="container mx-auto px-4">
+            <AnimatedSection>
+              <div className="text-center mb-8">
+                <motion.span 
+                  className="px-3 py-1 rounded-full text-xs font-bold bg-success/20 text-success border border-success/30"
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ delay: 0.2, type: "spring" }}
+                >
+                  <Play className="w-3 h-3 inline-block mr-1" />
+                  OPEN
+                </motion.span>
+                <h2 className="text-2xl font-bold mt-3">Open Videos</h2>
+                <p className="text-muted-foreground text-sm mt-1">Free videos that play automatically</p>
+              </div>
+            </AnimatedSection>
+            <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 max-w-6xl mx-auto">
+              {openVideos.map((video) => (
+                <StaggerItem key={video.id}>
+                  <OpenVideoCard
+                    id={video.id}
+                    title={video.title}
+                    thumbnail={video.thumbnail}
+                    videoUrl={video.videoUrl}
+                    views={video.views}
+                    duration={video.duration}
                   />
                 </StaggerItem>
               ))}
