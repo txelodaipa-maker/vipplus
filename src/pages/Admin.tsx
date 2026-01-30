@@ -82,13 +82,15 @@ const Admin = () => {
   }, [settings]);
 
   const handleAddVideo = () => {
-    if (!newVideo.title || !newVideo.thumbnail) {
-      return;
-    }
+    // Open videos only need title and videoUrl, others need thumbnail
+    if (!newVideo.title) return;
+    if (newVideo.isOpen && !newVideo.videoUrl) return;
+    if (!newVideo.isOpen && !newVideo.thumbnail) return;
+    
     addVideoMutation.mutate({
       title: newVideo.title || "",
       description: newVideo.description || "",
-      thumbnail: newVideo.thumbnail || "",
+      thumbnail: newVideo.isOpen ? (newVideo.videoUrl || "open-video") : (newVideo.thumbnail || ""),
       videoUrl: newVideo.videoUrl || "",
       paymentLink: newVideo.paymentLink || "",
       price: newVideo.price || 30,

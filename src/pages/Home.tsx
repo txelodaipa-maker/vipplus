@@ -326,7 +326,6 @@ const Home = () => {
                   <OpenVideoCard
                     id={video.id}
                     title={video.title}
-                    thumbnail={video.thumbnail}
                     videoUrl={video.videoUrl}
                     views={video.views}
                     duration={video.duration}

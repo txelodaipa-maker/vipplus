@@ -41,21 +41,27 @@ export const VideoForm = ({ video, onChange, onSave, saveLabel = "Salvar", isLoa
       </div>
 
       {/* Thumbnail & Video Upload */}
-      <div className="grid grid-cols-2 gap-3">
+      <div className={`grid gap-3 ${video.isOpen ? 'grid-cols-1' : 'grid-cols-2'}`}>
+        {!video.isOpen && (
+          <div className="space-y-1">
+            <Label className="text-xs">Thumbnail</Label>
+            <ThumbnailUpload
+              value={video.thumbnail || ""}
+              onChange={(url) => onChange({ thumbnail: url })}
+            />
+          </div>
+        )}
         <div className="space-y-1">
-          <Label className="text-xs">Thumbnail</Label>
-          <ThumbnailUpload
-            value={video.thumbnail || ""}
-            onChange={(url) => onChange({ thumbnail: url })}
-          />
-        </div>
-        <div className="space-y-1">
-          <Label className="text-xs">Vídeo</Label>
+          <Label className="text-xs">Vídeo {video.isOpen && "(obrigatório)"}</Label>
           <VideoUpload
             value={video.videoUrl || ""}
             onChange={(url, duration) => {
               const updates: Partial<typeof video> = { videoUrl: url };
               if (duration) updates.duration = duration;
+              // For open videos, use first frame as thumbnail placeholder
+              if (video.isOpen && !video.thumbnail) {
+                updates.thumbnail = url || "open-video";
+              }
               onChange(updates);
             }}
           />
