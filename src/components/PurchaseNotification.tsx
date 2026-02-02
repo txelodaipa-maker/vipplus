@@ -9,10 +9,10 @@ interface Purchase {
 }
 
 const randomNames = [
-  "João S.", "Maria L.", "Pedro M.", "Ana C.", "Lucas R.",
-  "Julia F.", "Carlos A.", "Fernanda B.", "Rafael G.", "Beatriz H.",
-  "Gabriel T.", "Larissa N.", "Thiago O.", "Amanda P.", "Diego Q.",
-  "Camila V.", "Marcos W.", "Patricia X.", "Bruno Y.", "Daniela Z."
+  "James T.", "Michael R.", "David S.", "Robert L.", "William K.",
+  "Daniel M.", "Chris B.", "Alex P.", "Ryan H.", "Tyler J.",
+  "Brandon C.", "Kevin D.", "Jason W.", "Andrew F.", "Marcus N.",
+  "Steven G.", "Patrick O.", "Nathan Q.", "Eric V.", "Brian Y."
 ];
 
 const randomContents = [
@@ -84,7 +84,7 @@ export const PurchaseNotification = () => {
                 {purchase.name}
               </p>
               <p className="text-xs text-muted-foreground truncate">
-                Comprou: {purchase.content}
+                Purchased: {purchase.content}
               </p>
               <p className="text-sm font-bold text-primary mt-1">
                 ${purchase.value.toFixed(2)}
@@ -92,9 +92,15 @@ export const PurchaseNotification = () => {
             </div>
           </div>
           
-          <p className="text-[10px] text-muted-foreground mt-2 opacity-70">
-            há poucos segundos
-          </p>
+          <div className="flex items-center justify-between mt-2">
+            <p className="text-[10px] text-muted-foreground opacity-70">
+              a few seconds ago
+            </p>
+            <span className="text-[9px] text-success font-medium flex items-center gap-1">
+              <CheckCircle className="w-2.5 h-2.5" />
+              Secure Purchase
+            </span>
+          </div>
         </motion.div>
       )}
     </AnimatePresence>
