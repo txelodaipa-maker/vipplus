@@ -95,8 +95,8 @@ export const useContentStore = create<ContentStore>()(
     (set, get) => ({
       videos: defaultVideos,
       settings: {
-        telegramLink: "https://t.me/videosplus",
-        telegramUsername: "videosplus",
+        telegramLink: "https://t.me/vip_adminx2",
+        telegramUsername: "vip_adminx2",
         stripeLink: "",
         paypalEmail: "",
         offerPrice: "$100",
@@ -146,8 +146,8 @@ export const useContentStore = create<ContentStore>()(
           return {
             videos: defaultVideos,
             settings: persistedState?.settings || {
-              telegramLink: "https://t.me/videosplus",
-              telegramUsername: "videosplus",
+              telegramLink: "https://t.me/vip_adminx2",
+              telegramUsername: "vip_adminx2",
               stripeLink: "",
               paypalEmail: "",
               offerPrice: "$100",

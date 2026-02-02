@@ -31,7 +31,7 @@ const Home = () => {
     return encodeURIComponent(message);
   };
 
-  const telegramOfferLink = `${settings?.telegramLink || "https://t.me/videosplus"}?text=${generateOfferMessage()}`;
+  const telegramOfferLink = `${settings?.telegramLink || "https://t.me/vip_adminx2"}?text=${generateOfferMessage()}`;
 
   if (videosLoading) {
     return (

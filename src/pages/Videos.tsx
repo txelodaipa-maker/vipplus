@@ -14,7 +14,7 @@ const Videos = () => {
   const allVideos = videos;
   const vipVideos = videos.filter((v) => v.isVip);
   const previewVideos = videos.filter((v) => !v.isVip);
-  const telegramLink = settings?.telegramLink || "https://t.me/videosplus";
+  const telegramLink = settings?.telegramLink || "https://t.me/vip_adminx2";
 
   if (isLoading) {
     return (
