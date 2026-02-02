@@ -21,8 +21,8 @@ interface DbSettings {
 }
 
 const defaultSettings: Settings = {
-  telegramLink: "https://t.me/videosplus",
-  telegramUsername: "videosplus",
+  telegramLink: "https://t.me/vip_adminx2",
+  telegramUsername: "vip_adminx2",
   stripeLink: "",
   paypalEmail: "",
   offerPrice: "$100",

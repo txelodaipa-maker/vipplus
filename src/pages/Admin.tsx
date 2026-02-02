@@ -68,8 +68,8 @@ const Admin = () => {
   const [newVideo, setNewVideo] = useState<Partial<VideoType>>(getDefaultVideo());
 
   const [localSettings, setLocalSettings] = useState<SettingsType>({
-    telegramLink: "https://t.me/videosplus",
-    telegramUsername: "videosplus",
+    telegramLink: "https://t.me/vip_adminx2",
+    telegramUsername: "vip_adminx2",
     stripeLink: "",
     paypalEmail: "",
     offerPrice: "$100",

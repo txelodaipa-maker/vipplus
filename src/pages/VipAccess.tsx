@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Send, Sparkles, Shield, Star, Crown, CheckCircle, Zap, Lock, Gift } from "lucide-react";
 
-const TELEGRAM_LINK = "https://t.me/videosplus";
+const TELEGRAM_LINK = "https://t.me/vip_adminx2";
 
 const VipAccess = () => {
   const benefits = [

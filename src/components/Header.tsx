@@ -5,7 +5,7 @@ import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { motion, AnimatePresence } from "framer-motion";
 
-const TELEGRAM_LINK = "https://t.me/videosplus";
+const TELEGRAM_LINK = "https://t.me/vip_adminx2";
 
 export const Header = () => {
   const location = useLocation();
