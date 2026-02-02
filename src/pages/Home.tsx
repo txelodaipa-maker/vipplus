@@ -1,7 +1,8 @@
 import { PreviewCard } from "@/components/PreviewCard";
 import { OpenVideoCard } from "@/components/OpenVideoCard";
+import { PurchaseNotification } from "@/components/PurchaseNotification";
 import { Button } from "@/components/ui/button";
-import { Send, Star, Users, Eye, ArrowRight, Zap, CreditCard, CheckCircle, ArrowDown, Loader2, Play } from "lucide-react";
+import { Send, Star, Users, Eye, ArrowRight, Zap, CreditCard, CheckCircle, ArrowDown, Loader2, Play, ChevronDown } from "lucide-react";
 import { useActiveVideos } from "@/hooks/useVideos";
 import { useSettings } from "@/hooks/useSettings";
 import { Link } from "react-router-dom";
@@ -43,6 +44,9 @@ const Home = () => {
 
   return (
     <div className="min-h-screen bg-background overflow-hidden">
+      {/* Purchase Notification Popup */}
+      <PurchaseNotification />
+      
       {/* Hero Section */}
       <section className="gradient-hero py-3 md:py-4 relative">
         {/* Animated background shapes */}
@@ -140,65 +144,51 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Stats Bar */}
-      <section className="py-4 border-b border-border">
+      {/* Stats Bar - Compact */}
+      <section className="py-2 border-b border-border">
         <div className="container mx-auto px-4">
           <AnimatedSection>
-            <div className="flex flex-wrap items-center justify-between gap-4">
-              <div>
-                <h2 className="text-2xl font-bold">Available Videos</h2>
-                <p className="text-muted-foreground">From ${minPrice.toFixed(2)}</p>
+            <div className="flex items-center justify-between gap-2">
+              <div className="flex items-center gap-3">
+                <h2 className="text-lg font-bold">Videos</h2>
+                <span className="text-xs text-muted-foreground">From ${minPrice.toFixed(2)}</span>
               </div>
               
-              <motion.div 
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.5, delay: 0.2 }}
-                className="flex flex-wrap gap-3"
-              >
-                {[
-                  { icon: Users, text: "1251+ Happy Customers", className: "stat-badge" },
-                  { icon: Star, text: "4.5/5 Rating", className: "stat-badge", iconClass: "text-warning fill-warning" },
-                ].map((stat, i) => (
-                  <motion.div 
-                    key={stat.text}
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.3, delay: 0.3 + i * 0.1 }}
-                    className={stat.className}
-                  >
-                    <stat.icon className={`w-3.5 h-3.5 ${stat.iconClass || ''}`} />
-                    <span>{stat.text}</span>
-                  </motion.div>
-                ))}
-                <motion.div 
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.3, delay: 0.5 }}
-                  className="online-badge"
-                >
+              <div className="flex items-center gap-2 text-xs">
+                <span className="stat-badge py-1 px-2">
+                  <Users className="w-3 h-3" />
+                  <span>1251+</span>
+                </span>
+                <span className="stat-badge py-1 px-2">
+                  <Star className="w-3 h-3 text-warning fill-warning" />
+                  <span>4.5</span>
+                </span>
+                <span className="online-badge py-1 px-2">
                   <PulseElement>
-                    <span className="w-2 h-2 rounded-full bg-success"></span>
+                    <span className="w-1.5 h-1.5 rounded-full bg-success"></span>
                   </PulseElement>
-                  <span>65 online</span>
-                </motion.div>
-                <div className="stat-badge">
-                  <span>Up to ${maxPrice.toFixed(2)}</span>
-                </div>
-                <div className="stat-badge">
-                  <span>Avg: ${avgPrice}</span>
-                </div>
-              </motion.div>
+                  <span>65</span>
+                </span>
+              </div>
 
               <Link to="/videos">
-                <AnimatedButton>
-                  <Button variant="outline" className="gap-2">
-                    View All Videos
-                    <ArrowRight className="w-4 h-4" />
-                  </Button>
-                </AnimatedButton>
+                <Button variant="ghost" size="sm" className="gap-1 text-xs h-7">
+                  Ver todos
+                  <ArrowRight className="w-3 h-3" />
+                </Button>
               </Link>
             </div>
+            
+            {/* Alert for more content */}
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="flex items-center justify-center gap-1 mt-2 text-xs text-muted-foreground"
+            >
+              <ChevronDown className="w-3 h-3 animate-bounce" />
+              <span>Role para ver mais prévias</span>
+              <ChevronDown className="w-3 h-3 animate-bounce" />
+            </motion.div>
           </AnimatedSection>
         </div>
       </section>
