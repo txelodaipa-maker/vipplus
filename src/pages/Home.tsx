@@ -27,7 +27,7 @@ const Home = () => {
 
   // Generate Telegram message for special offer
   const generateOfferMessage = () => {
-    const message = `Hi! I'm interested in the ${settings?.offerPrice || "$100"} offer including all content. Could you guide me on how to pay?`;
+    const message = `Hi! I'm interested in the $50 offer including all content (TODAY ONLY). Could you guide me on how to pay?`;
     return encodeURIComponent(message);
   };
 
@@ -87,9 +87,21 @@ const Home = () => {
                 transition={{ duration: 0.5, delay: 0.3, ease: "backOut" }}
                 className="inline-block"
               >
-                {settings?.offerPrice || "$100"}
+                $50
               </motion.span>
             </motion.h1>
+
+            {/* Urgency badge */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, delay: 0.25 }}
+              className="inline-block"
+            >
+              <span className="px-4 py-2 rounded-full text-sm font-bold bg-red-500/90 text-white animate-pulse">
+                ⏰ Valid only for TODAY!
+              </span>
+            </motion.div>
             
             <motion.p 
               initial={{ opacity: 0 }}
@@ -118,7 +130,7 @@ const Home = () => {
                 <AnimatedButton>
                   <Button size="lg" className="bg-white text-primary hover:bg-white/90 gap-2 font-semibold">
                     <CreditCard className="w-4 h-4" />
-                    Pay {settings?.offerPrice || "$100"} Now
+                    Pay $50 Now
                   </Button>
                 </AnimatedButton>
               </a>
