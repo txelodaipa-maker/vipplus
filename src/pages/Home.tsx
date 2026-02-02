@@ -186,7 +186,7 @@ const Home = () => {
               className="flex items-center justify-center gap-1 mt-2 text-xs text-muted-foreground"
             >
               <ChevronDown className="w-3 h-3 animate-bounce" />
-              <span>Role para ver mais prévias</span>
+              <span>Scroll down for more previews</span>
               <ChevronDown className="w-3 h-3 animate-bounce" />
             </motion.div>
           </AnimatedSection>
