@@ -126,7 +126,7 @@ const Home = () => {
                   </Button>
                 </AnimatedButton>
               </a>
-              <a href={settings?.stripeLink || "#"} target="_blank" rel="noopener noreferrer">
+              <a href={telegramOfferLink} target="_blank" rel="noopener noreferrer">
                 <AnimatedButton>
                   <Button size="lg" className="bg-white text-primary hover:bg-white/90 gap-2 font-semibold">
                     <CreditCard className="w-4 h-4" />
@@ -410,7 +410,7 @@ const Home = () => {
                     </Button>
                   </AnimatedButton>
                 </a>
-                <a href={settings?.stripeLink || "#"} target="_blank" rel="noopener noreferrer">
+                <a href={telegramOfferLink} target="_blank" rel="noopener noreferrer">
                   <AnimatedButton>
                     <Button size="lg" className="btn-pay gap-2">
                       <CreditCard className="w-4 h-4" />
