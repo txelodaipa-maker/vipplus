@@ -44,7 +44,7 @@ const Home = () => {
   return (
     <div className="min-h-screen bg-background overflow-hidden">
       {/* Hero Section */}
-      <section className="gradient-hero py-5 md:py-6 relative">
+      <section className="gradient-hero py-3 md:py-4 relative">
         {/* Animated background shapes */}
         <motion.div 
           className="absolute top-10 left-10 w-32 h-32 bg-white/5 rounded-full blur-3xl"
@@ -64,7 +64,7 @@ const Home = () => {
         />
 
         <div className="container mx-auto px-4 relative z-10">
-          <div className="max-w-3xl mx-auto text-center text-white space-y-3">
+          <div className="max-w-3xl mx-auto text-center text-white space-y-2">
             <motion.p 
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -78,7 +78,7 @@ const Home = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
-              className="text-4xl md:text-6xl font-bold"
+              className="text-2xl md:text-3xl font-bold"
             >
               🎉 Special Offer - All Content{" "}
               <motion.span
@@ -116,7 +116,7 @@ const Home = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.3 }}
-              className="flex flex-wrap justify-center gap-3 pt-4"
+              className="flex flex-wrap justify-center gap-2 pt-2"
             >
               <a href={telegramOfferLink} target="_blank" rel="noopener noreferrer">
                 <AnimatedButton>
@@ -136,34 +136,6 @@ const Home = () => {
               </a>
             </motion.div>
 
-            {/* Features */}
-            <motion.div 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.5, delay: 0.4 }}
-              className="flex flex-wrap justify-center gap-6 pt-6 text-sm"
-            >
-              {[
-                { icon: CheckCircle, text: "Full access" },
-                { icon: Zap, text: "Auto delivery" },
-                { icon: CreditCard, text: "One-time payment" }
-              ].map((item, i) => (
-                <motion.div 
-                  key={item.text}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.4, delay: 0.5 + i * 0.1 }}
-                  className="flex items-center gap-2"
-                >
-                  <item.icon className="w-4 h-4" />
-                  <span>{item.text}</span>
-                </motion.div>
-              ))}
-            </motion.div>
-
-            <FloatingElement className="pt-4">
-              <ArrowDown className="w-6 h-6 mx-auto opacity-60" />
-            </FloatingElement>
           </div>
         </div>
       </section>
