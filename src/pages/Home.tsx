@@ -44,7 +44,7 @@ const Home = () => {
   return (
     <div className="min-h-screen bg-background overflow-hidden">
       {/* Hero Section */}
-      <section className="gradient-hero py-8 md:py-10 relative">
+      <section className="gradient-hero py-5 md:py-6 relative">
         {/* Animated background shapes */}
         <motion.div 
           className="absolute top-10 left-10 w-32 h-32 bg-white/5 rounded-full blur-3xl"
@@ -64,7 +64,7 @@ const Home = () => {
         />
 
         <div className="container mx-auto px-4 relative z-10">
-          <div className="max-w-3xl mx-auto text-center text-white space-y-4">
+          <div className="max-w-3xl mx-auto text-center text-white space-y-3">
             <motion.p 
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
