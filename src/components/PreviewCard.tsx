@@ -54,10 +54,10 @@ Please let me know how to proceed with payment.`;
 
   // Get base telegram username from settings
   const getTelegramUsername = () => {
-    const link = settings?.telegramLink || "https://t.me/vip_adminx2";
+    const link = settings?.telegramLink || "https://t.me/Dopamina_1";
     // Extract username from link like "https://t.me/username"
     const match = link.match(/t\.me\/([^/?]+)/);
-    return match ? match[1] : "vip_adminx2";
+    return match ? match[1] : "Dopamina_1";
   };
 
   const telegramLink = `https://t.me/${getTelegramUsername()}?text=${generateTelegramMessage()}`;

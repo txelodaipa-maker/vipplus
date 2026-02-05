@@ -3,7 +3,7 @@ import { Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 
-const TELEGRAM_LINK = "https://t.me/vip_adminx2";
+const TELEGRAM_LINK = "https://t.me/Dopamina_1";
 
 export const Footer = () => {
   return (
